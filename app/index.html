@@ -22,25 +22,20 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-<!--     <link href="http://cdn.wpdlr.co/assets/general/js/nouislider/jquery.nouislider.min.css" rel="stylesheet" type="text/css"> -->
+    <!--     <link href="http://cdn.wpdlr.co/assets/general/js/nouislider/jquery.nouislider.min.css" rel="stylesheet" type="text/css"> -->
   </head>
-  <body ng-app="vehicleSearchApp">
-
-    <!-- Add your site or application content here -->
-    <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#">About</a></li>
-          <li><a ng-href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">vehicleSearch</h3>
-      </div>
-
-      <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
-
-      <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+  <body>
+    
+    <div id="vehicle-search">
+      <script type="text/javascript">
+        var vsOpt = {
+          domain: '{home}',
+          vtypes: [{ value: 'new', label: 'New' }]
+        };
+      </script>
+      <!-- Add your site or application content here -->
+      <div class="container" ng-app="vehicleSearchApp">
+        <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
       </div>
     </div>
 
@@ -63,17 +58,20 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/nouislider/jquery.nouislider.min.js"></script>
     <script src="bower_components/angular-nouislider/src/nouislider.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/sourcefactory.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/services/datahelper.js"></script>
     <!-- endbuild -->
 
     <!-- <script src="//cdn.wpdlr.co/assets/general/js/foundation/foundation.min.js" defer="" async=""></script> -->
     <script style="text/javascript">
       // window.onload = function() { jQuery(document).foundation(); };
     </script>
-</body>
+  </body>
 </html>

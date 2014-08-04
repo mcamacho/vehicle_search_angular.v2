@@ -11,5 +11,8 @@
 angular
   .module('vehicleSearchApp', [
     'ngAnimate',
-    'ngTouch'
-  ]);
+    'ngTouch',
+    'nouislider',
+    'vehicleSearchOpt'
+  ])
+  .constant('_', window._);

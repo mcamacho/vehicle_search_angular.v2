@@ -1,14 +1,33 @@
-<div class="section-container accordion" data-section="accordion">
-  <section ng-repeat="(cat, opt) in menu.categoriesI">
-    <p class="title" data-section-title>
-      <a href="#" class="small"><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq($index)" ng-click="menu.toggle($index)"></span></a>
-    </p>
-    <div class="content" data-section-content>
-      <ul class="small-block-grid-2">
-        <li ng-repeat="(key, count) in opt.options">
-          <button class="small expand" title="{{count}} vehicles" ng-click="menu.filterList(opt.valueKey, key)">{{key}}</button>
-        </li>
-      </ul>
-    </div>
+<div class="menu-head">
+  <p ng-hide="vtype.enable">{{vtype.selected.value}}</p>
+  <ul class="button-group" ng-show="vtype.enable">
+    <li ng-repeat="type in vtype.list">
+      <button class="small" title="{{type.value}}" ng-class="{disabled: vtype.live.value === type.value}" ng-click="vtype.set(type.value)">{{type.label}}</button>
+    </li>
+  </ul>
+</div><!-- end menu-head -->
+<div class="section-container accordion main-accordion" data-section="accordion">
+  <section class="active">
+    <p class="title" data-section-title><a href="#">Filter By</a></p>
+    <div class="content filter-accordion" data-section-content>
+      <div class="section-container accordion" data-section="accordion">
+        <section ng-repeat="opt in menu.categoriesI" ng-show="menu.current === -1 || menu.current === $index">
+          <p class="title" data-section-title ng-click="menu.setCurrent($index)">
+            <a href="#" class="small"><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq($index)" ng-click="menu.removeOption($index)"></span><span class="right"><i class="fa fa-plus-square" ng-show="menu.current!==$index"></i></span><span class="right"><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></span></a>
+          </p>
+          <div class="content" data-section-content>
+            <ul class="small-block-grid-2">
+              <li ng-repeat="(key, count) in opt.options">
+                <button class="small expand" title="{{count}} vehicles" ng-click="menu.filterList(opt.valueKey, key)">{{key}}</button>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div><!-- end filter-accordion -->
   </section>
-</div>
+  <section>
+    <p class="title" data-section-title><a href="#">Range By</a></p>
+    <div class="content filter-accordion" data-section-content></div>
+  </section>
+</div><!-- end main-accordion -->

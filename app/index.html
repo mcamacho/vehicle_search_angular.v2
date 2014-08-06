@@ -10,8 +10,8 @@
     <script src="//wpdlr.co/wp-includes/js/jquery/jquery.js?ver=1.10.2"></script>
     <script src="//wpdlr.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1"></script> -->
 
-    <!-- <link href="//cdn.wpdlr.co.s3.amazonaws.com/assets/general/css/foundation/default.css" rel="stylesheet" type="text/css">
-    <link href="//cdn.wpdlr.co.s3.amazonaws.com/assets/general/css/foundation/general_enclosed_foundicons.css" rel="stylesheet" type="text/css"> -->
+    <link href="//cdn.wpdlr.co.s3.amazonaws.com/assets/general/css/foundation/default.css" rel="stylesheet" type="text/css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -29,8 +29,10 @@
     <div id="vehicle-search">
       <script type="text/javascript">
         var vsOpt = {
-          domain: '{home}',
-          vtypes: [{ value: 'new', label: 'New' }]
+          domain: '{home}'
+          ,vtypeEnable: true
+          // ,vtypeList: [{ value: 'new', label: 'New' }]
+          // ,vmakeList: ['Honda']
         };
       </script>
       <!-- Add your site or application content here -->
@@ -69,9 +71,9 @@
     <script src="scripts/services/datahelper.js"></script>
     <!-- endbuild -->
 
-    <!-- <script src="//cdn.wpdlr.co/assets/general/js/foundation/foundation.min.js" defer="" async=""></script> -->
+    <script src="//cdn.wpdlr.co/assets/general/js/foundation/foundation.min.js"></script>
     <script style="text/javascript">
-      // window.onload = function() { jQuery(document).foundation(); };
+      window.onload = function() { jQuery(document).foundation(); };
     </script>
   </body>
 </html>

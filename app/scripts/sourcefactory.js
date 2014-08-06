@@ -13,21 +13,21 @@ angular.module('vehicleSearchOpt', [])
       year: {
         keyval: 'year',
         menu: {
-          order: 5,
+          order: 15,
           valueLabel: 'Year'
         }
       },
       make: {
         keyval: 'make',
         menu: {
-          order: 10,
+          order: 5,
           valueLabel: 'Make'
         }
       },
       model: {
         keyval: 'model',
         menu: {
-          order: 15,
+          order: 10,
           valueLabel: 'Model'
         }
       },
@@ -87,7 +87,7 @@ angular.module('vehicleSearchOpt', [])
         keyval: 'evox_id'
       }
     };
-    var _defTypes = [
+    var _vtypeList = [
       {
         value: 'used',
         label: 'Pre Owned'
@@ -99,6 +99,8 @@ angular.module('vehicleSearchOpt', [])
     ];
     return {
       menu1: _menu1,
-      defTypes: _defTypes
+      vtypeList: _vtypeList,
+      vtypeEnable: false,
+      vmakeList: []
     };
   });

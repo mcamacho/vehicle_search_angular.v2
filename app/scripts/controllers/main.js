@@ -26,6 +26,8 @@ angular.module('vehicleSearchApp')
       }
     };
 
+    $scope.displayList = opt.displayList;
+
     // init menu with controller methods to handle menu changes
     $scope.menu = dataHelper.menu;
 

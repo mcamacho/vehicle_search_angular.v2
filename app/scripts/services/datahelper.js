@@ -10,8 +10,13 @@
 angular.module('vehicleSearchApp')
   .factory('dataHelper', function (_, $sce) {
     return {
+      getMenuItems: function (objA, key) {
+        return _.pick(objA, function(objVal) {
+          return _.has(objVal, key);
+        });
+      },
       getAjaxParams: function (o) {
-        var keys = _.map(o.menu1, function (oval) {
+        var keys = _.map(o.menu, function (oval) {
           return oval.keyval;
         }).join();
         var params = {
@@ -42,6 +47,8 @@ angular.module('vehicleSearchApp')
           this.getQuery();
           // calls the method to recreate the categoriesI model
           this.updateModel();
+          // calls the method to update the slidersI model
+          this.updateSlider();
         },
         // create the array of objects to run the menu tmpl
         getCat: function () {
@@ -58,6 +65,48 @@ angular.module('vehicleSearchApp')
             };
           }, this);
           this.categoriesI = _.sortBy(category, 'order');
+        },
+        // returns object config to init slider input
+        getSlider: function() {
+          var slider = _.mapValues(this.sliderObj, function(objVal) {
+            var cleanArray = [];
+            var valArray = _.pluck(this.listI, objVal.keyval);
+            for (var i = valArray.length - 1; i >= 0; i--) {
+              cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+            }
+            var min = Math.floor(_.min(cleanArray) / 1000) * 1000;
+            var max = Math.ceil(_.max(cleanArray) / 1000) * 1000;
+            return {
+              label: objVal.slider.valueLabel,
+              order: objVal.slider.order,
+              from: min,
+              to: max,
+              step: 1000,
+              min: min,
+              max: max,
+              width: '100%'
+            };
+          }, this);
+          this.slidersI = _.sortBy(slider, 'order');
+        },
+        // updates object from and to vars of slider input
+        updateSlider: function() {
+          var slider = _.mapValues(this.sliderObj, function(objVal) {
+            var cleanArray = [];
+            var valArray = _.pluck(this.listI, objVal.keyval);
+            for (var i = valArray.length - 1; i >= 0; i--) {
+              cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+            }
+            var currentData = _.find(this.slidersI, {order: objVal.slider.order});
+            var from = Math.floor(_.min(cleanArray) / 1000) * 1000;
+            var to = Math.ceil(_.max(cleanArray) / 1000) * 1000;
+            return _.assign(currentData, {
+              from: from,
+              to: to
+            });
+          }, this);
+
+          this.slidersI = _.sortBy(slider, 'order');
         },
         // toggle menu.current among index:open and -1:closed
         setCurrent: function(index) {
@@ -114,23 +163,6 @@ angular.module('vehicleSearchApp')
             });
           }
           this.getCat();
-        },
-        // returns object config to init slider input
-        getSlider: function(key) {
-          var valArray = _.pluck(this.listI, key);
-          var cleanArray = [];
-          for (var i = valArray.length - 1; i >= 0; i--) {
-            cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
-          }
-          var min = Math.floor(_.min(cleanArray) / 1000) * 1000;
-          var max = Math.ceil(_.max(cleanArray) / 1000) * 1000;
-          return {
-            from: min,
-            to: max,
-            step: 1000,
-            min: min,
-            max: max
-          };
         }
       }
     };

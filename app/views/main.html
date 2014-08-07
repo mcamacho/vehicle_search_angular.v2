@@ -2,12 +2,12 @@
   <p ng-hide="vtype.enable">{{vtype.selected.value}}</p>
   <ul class="button-group" ng-show="vtype.enable">
     <li ng-repeat="type in vtype.list">
-      <button class="small" title="{{type.value}}" ng-class="{disabled: vtype.live.value === type.value}" ng-click="vtype.set(type.value)">{{type.label}}</button>
+      <button title="{{type.value}}" ng-class="{disabled: vtype.live.value === type.value}" ng-click="vtype.set(type.value)">{{type.label}}</button>
     </li>
   </ul>
 </div><!-- end menu-head -->
 <div class="section-container accordion main-accordion" data-section="accordion">
-  <section class="active">
+  <section class="active-b">
     <p class="title" data-section-title><a href="#">Filter By</a></p>
     <div class="content filter-accordion" data-section-content>
       <div class="section-container accordion" data-section="accordion">
@@ -29,9 +29,14 @@
       </div>
     </div><!-- end filter-accordion -->
   </section>
-  <section>
+  <section class="active">
     <p class="title" data-section-title><a href="#">Range By</a></p>
-    <div class="content filter-accordion" data-section-content></div>
+    <div class="content slider-accordion" data-section-content>
+      <div ng-repeat="sld in menu.slidersI">
+        <div class="labelTxt">{{sld.label}}: $<span class="price-from">{{sld.from | number}}</span> - $<span class="price-to">{{sld.to | number}}</span></div>
+        <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="sld.from" ng-model-range="sld.to" style="width: {{sld.width}};"></div>
+      </div>
+    </div><!-- end slider-accordion -->
   </section>
 </div><!-- end main-accordion -->
 <a href="http://viphonda.com/inventory/{{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom" ng-hide="displayList" target="_blank">View {{menu.resultsQty()}} Results</a>

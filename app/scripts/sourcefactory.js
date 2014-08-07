@@ -9,7 +9,7 @@
  */
 angular.module('vehicleSearchOpt', [])
   .factory('sourceFactory', function () {
-    var _menu1 = {
+    var _menu = {
       year: {
         keyval: 'year',
         menu: {
@@ -68,11 +68,17 @@ angular.module('vehicleSearchOpt', [])
       },
       price: {
         keyval: 'price',
-        slideorder: 5
+        slider: {
+          order: 5,
+          valueLabel: 'Price'
+        }
       },
       mileage: {
         keyval: 'mileage',
-        slideorder: 10
+        slider: {
+          order: 10,
+          valueLabel: 'Mileage'
+        }
       },
       vin: {
         keyval: 'vin'
@@ -98,7 +104,7 @@ angular.module('vehicleSearchOpt', [])
       }
     ];
     return {
-      menu1: _menu1,
+      menu: _menu,
       vtypeList: _vtypeList,
       vtypeEnable: false,
       vmakeList: [],

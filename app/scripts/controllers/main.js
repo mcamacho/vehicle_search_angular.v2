@@ -8,11 +8,14 @@
  * Controller of the vehicleSearchApp
  */
 angular.module('vehicleSearchApp')
-  .controller('MainCtrl', function ($scope, $window, $http, sourceFactory, _, dataHelper, $log) {
+  .controller('MainCtrl', function ($scope, $window, $http, $timeout, sourceFactory, _, dataHelper, $log) {
     // define private var
-    var mainData, menuObj;
+    var mainData, sliderPromise;
     // set options
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
+    // check for menu and slider objects on the menu options
+    var menuObj = dataHelper.getMenuItems(opt.menu, 'menu');
+    var sliderObj = dataHelper.getMenuItems(opt.menu, 'slider');
     // create the ajax parameters map object
     var ajaxParams = dataHelper.getAjaxParams(opt);
 
@@ -34,31 +37,32 @@ angular.module('vehicleSearchApp')
     // success ajax response
     function populateData(data) {
       mainData = dataHelper.cleanNanValues(data);
-      menuObj = _.pick(opt.menu1, function(objVal) {
-        return _.has(objVal, 'menu');
-      });
-      if (!_.isEmpty(mainData) && !_.isEmpty(menuObj)) {
+      if (!_.isEmpty(mainData)) {
         _.assign($scope.menu, {
           current: -1,
-          menuObj: menuObj,
           listC: mainData,
           listI: mainData,
           categoriesI: [],
           filterObj: {}
-          // ,
-          // slider: {
-          //   price: $scope.menu.getSlider('price'),
-          //   mileage: $scope.menu.getSlider('mileage')
-          // },
-          // active: true
+        });
+      } else {
+        $log.error('no data available - end of road');
+      }
+      if (!_.isEmpty(menuObj)) {
+        _.assign($scope.menu, {
+          menuObj: menuObj
         });
         dataHelper.menu.getCat();
-      } else if (_.isEmpty(mainData)) {
-        $log.error('no data available to populate the menu');
-      } else if (_.isEmpty(menuObj)) {
-        $log.error('no menu source available to populate the menu');
       } else {
-        $log.error('no data && menu source available to populate the menu');
+        $log.error('no menu items available to create the menu');
+      }
+      if (!_.isEmpty(sliderObj)) {
+        _.assign($scope.menu, {
+          sliderObj: sliderObj
+        });
+        dataHelper.menu.getSlider();
+      } else {
+        $log.error('no slider items available to create the sliders');
       }
     }
     // ajax call
@@ -72,10 +76,26 @@ angular.module('vehicleSearchApp')
       }).success(populateData);
     };
 
+    function watchSlider() {
+      $log.log($scope.menu.slidersI);
+    }
+
     // listen for filter changes ---------------------
     $scope.$watch('menu.filterObj', function (vnew, vold) {
       if (vold && vnew !== vold) { $log.log('fNew',vnew, 'fOld',vold);
         $scope.menu.update();
+        $scope.$broadcast('refreshSlider');
+      }
+    }, true);
+
+    // listen for filter changes ---------------------
+    $scope.$watch('menu.slidersI', function (vnew, vold) {
+      if (vold && vnew !== vold) {
+        $log.log('fNew',vnew, 'fOld',vold);
+        if (sliderPromise) {
+          $timeout.cancel(sliderPromise);
+        }
+        sliderPromise = $timeout(watchSlider, 200);
       }
     }, true);
 

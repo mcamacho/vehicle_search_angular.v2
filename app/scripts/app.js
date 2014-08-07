@@ -12,7 +12,7 @@ angular
   .module('vehicleSearchApp', [
     'ngAnimate',
     'ngTouch',
-    'nouislider',
+    'vr.directives.slider',
     'vehicleSearchOpt'
   ])
   .constant('_', window._);

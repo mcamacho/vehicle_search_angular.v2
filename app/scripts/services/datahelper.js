@@ -136,6 +136,7 @@ angular.module('vehicleSearchApp')
         // updates filterObj with a new key value pair
         filterList: function(valueKey, key) {
           this.filterObj[valueKey] = key;
+          // this.filterObj[valueKey] = this.filterObj[valueKey] ? this.filterObj[valueKey] + ',' + key : key;
         },
         //updates category header if only one option is available
         uniq: function(index) {
@@ -168,6 +169,7 @@ angular.module('vehicleSearchApp')
           var filter = _.omit(this.filterObj, rangeF);
           var range = _.pick(this.filterObj, rangeF);
           this.listI = _.isEmpty(filter) ? this.listC : _.where(this.listC, filter);
+          // this.listI = _.isEmpty(filter) ? this.listC : _.reject(this.listC, function (ele) { return ele[this.filterObj] }, this);
           if (!_.isEmpty(range)) {
             this.listI = _.filter(this.listI, function (obj) {
               var filReturn = [];

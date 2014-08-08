@@ -68,6 +68,7 @@ angular.module('vehicleSearchApp')
         },
         // returns object config to init slider input
         getSlider: function() {
+          this.range = {};
           var slider = _.mapValues(this.sliderObj, function(objVal) {
             var cleanArray = [];
             var valArray = _.pluck(this.listI, objVal.keyval);
@@ -76,11 +77,14 @@ angular.module('vehicleSearchApp')
             }
             var min = Math.floor(_.min(cleanArray) / 1000) * 1000;
             var max = Math.ceil(_.max(cleanArray) / 1000) * 1000;
+            this.range[objVal.keyval] = {
+              from: min,
+              to: max
+            };
             return {
+              keyval: objVal.keyval,
               label: objVal.slider.valueLabel,
               order: objVal.slider.order,
-              from: min,
-              to: max,
               step: 1000,
               min: min,
               max: max,
@@ -91,22 +95,19 @@ angular.module('vehicleSearchApp')
         },
         // updates object from and to vars of slider input
         updateSlider: function() {
-          var slider = _.mapValues(this.sliderObj, function(objVal) {
+          _.mapValues(this.sliderObj, function(objVal) {
             var cleanArray = [];
             var valArray = _.pluck(this.listI, objVal.keyval);
             for (var i = valArray.length - 1; i >= 0; i--) {
               cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
             }
-            var currentData = _.find(this.slidersI, {order: objVal.slider.order});
             var from = Math.floor(_.min(cleanArray) / 1000) * 1000;
             var to = Math.ceil(_.max(cleanArray) / 1000) * 1000;
-            return _.assign(currentData, {
+            this.range[objVal.keyval] = {
               from: from,
               to: to
-            });
+            };
           }, this);
-
-          this.slidersI = _.sortBy(slider, 'order');
         },
         // toggle menu.current among index:open and -1:closed
         setCurrent: function(index) {

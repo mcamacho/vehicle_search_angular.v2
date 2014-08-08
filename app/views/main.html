@@ -7,7 +7,7 @@
   </ul>
 </div><!-- end menu-head -->
 <div class="section-container accordion main-accordion" data-section="accordion">
-  <section class="active-b">
+  <section class="active">
     <p class="title" data-section-title><a href="#">Filter By</a></p>
     <div class="content filter-accordion" data-section-content>
       <div class="section-container accordion" data-section="accordion">
@@ -29,12 +29,12 @@
       </div>
     </div><!-- end filter-accordion -->
   </section>
-  <section class="active">
+  <section ng-click="checkActive()">
     <p class="title" data-section-title><a href="#">Range By</a></p>
     <div class="content slider-accordion" data-section-content>
       <div ng-repeat="sld in menu.slidersI">
-        <div class="labelTxt">{{sld.label}}: $<span class="price-from">{{sld.from | number}}</span> - $<span class="price-to">{{sld.to | number}}</span></div>
-        <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="sld.from" ng-model-range="sld.to" style="width: {{sld.width}};"></div>
+        <div class="labelTxt">{{sld.label}}: $<span class="price-from">{{menu.range[sld.keyval].from | number}}</span> - $<span class="price-to">{{menu.range[sld.keyval].to | number}}</span></div>
+        <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="menu.range[sld.keyval].from" ng-model-range="menu.range[sld.keyval].to" style="width: {{sld.width}};"></div>
       </div>
     </div><!-- end slider-accordion -->
   </section>

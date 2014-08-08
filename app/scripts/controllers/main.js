@@ -10,7 +10,7 @@
 angular.module('vehicleSearchApp')
   .controller('MainCtrl', function ($scope, $window, $http, $timeout, sourceFactory, _, dataHelper, $log) {
     // define private var
-    var mainData, sliderPromise;
+    var mainData, rangePromise;
     // set options
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
     // check for menu and slider objects on the menu options
@@ -77,35 +77,41 @@ angular.module('vehicleSearchApp')
     };
 
     function watchSlider() {
-      $log.log($scope.menu.slidersI);
+      $log.log($scope.menu.range);
     }
 
     // listen for filter changes ---------------------
     $scope.$watch('menu.filterObj', function (vnew, vold) {
-      if (vold && vnew !== vold) { $log.log('fNew',vnew, 'fOld',vold);
+      if (vold && vnew !== vold) {
+        // $log.log('fNew',vnew, 'fOld',vold);
         $scope.menu.update();
-        $scope.$broadcast('refreshSlider');
       }
     }, true);
 
     // listen for filter changes ---------------------
-    $scope.$watch('menu.slidersI', function (vnew, vold) {
+    $scope.$watch('menu.range', function (vnew, vold) {
       if (vold && vnew !== vold) {
-        $log.log('fNew',vnew, 'fOld',vold);
-        if (sliderPromise) {
-          $timeout.cancel(sliderPromise);
+        // $log.log('fNew',vnew, 'fOld',vold);
+        if (rangePromise) {
+          $timeout.cancel(rangePromise);
         }
-        sliderPromise = $timeout(watchSlider, 200);
+        rangePromise = $timeout(watchSlider, 200);
       }
     }, true);
 
     // listen for vehicle type changes ---------------------
     $scope.$watch('vtype.live', function (vnew, vold) {
-      if (vnew !== vold) { $log.log('lNew',vnew, 'lOld',vold);
+      if (vnew !== vold) {
+        // $log.log('lNew',vnew, 'lOld',vold);
         _.assign(ajaxParams, { type: vnew.value });
         callData();
       }
     });
+
+    $scope.checkActive = function () {
+      $scope.$broadcast('refreshSlider');
+    };
+
     // running the app
     callData();
   });

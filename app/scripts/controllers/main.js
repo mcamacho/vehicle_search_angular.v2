@@ -76,10 +76,6 @@ angular.module('vehicleSearchApp')
       }).success(populateData);
     };
 
-    function watchSlider() {
-      $log.log($scope.menu.range);
-    }
-
     // listen for filter changes ---------------------
     $scope.$watch('menu.filterObj', function (vnew, vold) {
       if (vold && vnew !== vold) {
@@ -90,12 +86,12 @@ angular.module('vehicleSearchApp')
 
     // listen for filter changes ---------------------
     $scope.$watch('menu.range', function (vnew, vold) {
-      if (vold && vnew !== vold) {
+      if (vold && vnew !== vold && $scope.menu.sliderListener) {
         // $log.log('fNew',vnew, 'fOld',vold);
         if (rangePromise) {
           $timeout.cancel(rangePromise);
         }
-        rangePromise = $timeout(watchSlider, 200);
+        rangePromise = $timeout(function () { $scope.menu.checkRange(); }, 500);
       }
     }, true);
 
@@ -108,7 +104,9 @@ angular.module('vehicleSearchApp')
       }
     });
 
+    // method to refresh the sliders after being hidden
     $scope.checkActive = function () {
+      $scope.menu.sliderListener = true;
       $scope.$broadcast('refreshSlider');
     };
 

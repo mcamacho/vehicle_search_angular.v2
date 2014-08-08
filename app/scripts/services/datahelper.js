@@ -8,7 +8,7 @@
  * Contains the menu object hash, the default vehicle condition types
  */
 angular.module('vehicleSearchApp')
-  .factory('dataHelper', function (_, $sce) {
+  .factory('dataHelper', function (_, $sce, $log) {
     return {
       getMenuItems: function (objA, key) {
         return _.pick(objA, function(objVal) {
@@ -40,6 +40,7 @@ angular.module('vehicleSearchApp')
         });
       },
       menu: {
+        sliderListener: true,
         update: function () {
           // clean current property, used in accordion display
           this.current = -1;
@@ -48,6 +49,7 @@ angular.module('vehicleSearchApp')
           // calls the method to recreate the categoriesI model
           this.updateModel();
           // calls the method to update the slidersI model
+          this.sliderListener = false;
           this.updateSlider();
         },
         // create the array of objects to run the menu tmpl
@@ -67,7 +69,7 @@ angular.module('vehicleSearchApp')
           this.categoriesI = _.sortBy(category, 'order');
         },
         // returns object config to init slider input
-        getSlider: function() {
+        getSlider: function () {
           this.range = {};
           var slider = _.mapValues(this.sliderObj, function(objVal) {
             var cleanArray = [];
@@ -94,7 +96,7 @@ angular.module('vehicleSearchApp')
           this.slidersI = _.sortBy(slider, 'order');
         },
         // updates object from and to vars of slider input
-        updateSlider: function() {
+        updateSlider: function () {
           _.mapValues(this.sliderObj, function(objVal) {
             var cleanArray = [];
             var valArray = _.pluck(this.listI, objVal.keyval);
@@ -107,6 +109,20 @@ angular.module('vehicleSearchApp')
               from: from,
               to: to
             };
+          }, this);
+        },
+        // run a loop over the range object keys,
+        // if they are different to the max and min, add to the filterObj
+        checkRange: function () {
+          // $log.log('menu.range', this.range, this.slidersI);
+          _.forEach(this.range, function (value, key) {
+            var sli = _.find(this.slidersI, {keyval: key});
+            // $log.log('range', value.from, value.to, key);
+            // $log.log('slider', sli.min, sli.max, sli.keyval);
+            if (value.from !== sli.min || value.to !== sli.max) {
+              $log.log('different', key, value.from, value.to);
+              this.filterList(key, value.from + ',' + value.to);
+            }
           }, this);
         },
         // toggle menu.current among index:open and -1:closed

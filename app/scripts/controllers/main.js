@@ -71,7 +71,7 @@ angular.module('vehicleSearchApp')
         method: 'GET',
         // method: 'POST',
         url: 'test' + ajaxParams.type + '.json',
-        // url: _custom.domain + '/_api/',
+        // url: opt.domain + '/_api/',
         params: ajaxParams
       }).success(populateData);
     };

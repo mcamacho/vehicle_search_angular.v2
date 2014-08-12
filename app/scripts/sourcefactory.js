@@ -104,10 +104,11 @@ angular.module('vehicleSearchOpt', [])
       }
     ];
     return {
+      dataUrl: 'http://api.dealerx.com/_api/',
       menu: _menu,
       vtypeList: _vtypeList,
-      vtypeEnable: false,
+      isVtypeEnable: false,
       vmakeList: [],
-      displayList: false
+      isViewListEnable: false
     };
   });

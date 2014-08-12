@@ -8,7 +8,7 @@
 </div><!-- end menu-head -->
 <div class="section-container accordion main-accordion" data-section="accordion">
   <section class="active">
-    <p class="title" data-section-title><a href="#">Filter By</a></p>
+    <p class="title" ng-click="setSliderActive(false)" data-section-title><a href="#">Filter By</a></p>
     <div class="content filter-accordion" data-section-content>
       <div class="section-container accordion" data-section="accordion">
         <section ng-repeat="opt in menu.categoriesI" ng-show="menu.current === -1 || menu.current === $index">
@@ -21,7 +21,7 @@
           <div class="content" data-section-content>
             <ul class="small-block-grid-2">
               <li ng-repeat="(key, count) in opt.options">
-                <button class="small expand" title="{{count}} vehicles" ng-click="menu.filterList(opt.valueKey, key)">{{key}}</button>
+                <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
               </li>
             </ul>
           </div>
@@ -29,14 +29,14 @@
       </div>
     </div><!-- end filter-accordion -->
   </section>
-  <section ng-click="checkActive()">
-    <p class="title" data-section-title><a href="#">Range By</a></p>
+  <section>
+    <p class="title" ng-click="setSliderActive(true)" data-section-title><a href="#">Range By</a></p>
     <div class="content slider-accordion" data-section-content>
       <div ng-repeat="sld in menu.slidersI">
-        <div class="labelTxt">{{sld.label}}: $<span class="price-from">{{menu.range[sld.keyval].from | number}}</span> - $<span class="price-to">{{menu.range[sld.keyval].to | number}}</span></div>
-        <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="menu.range[sld.keyval].from" ng-model-range="menu.range[sld.keyval].to" style="width: {{sld.width}};"></div>
+        <p class="labelTxt">{{sld.label}}: $<span class="price-from">{{menu.rangeObj[sld.keyval].from | number}}</span> - $<span class="price-to">{{menu.rangeObj[sld.keyval].to | number}}</span><a href="#" ng-click="menu.resetRange(sld.keyval)">Reset</a></p>
+        <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="menu.rangeObj[sld.keyval].from" ng-model-range="menu.rangeObj[sld.keyval].to" style="width: {{sld.width}};"></div>
       </div>
     </div><!-- end slider-accordion -->
   </section>
 </div><!-- end main-accordion -->
-<a href="http://viphonda.com/inventory/{{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom" ng-hide="displayList" target="_blank">View {{menu.resultsQty()}} Results</a>
+<a href="http://viphonda.com/inventory/{{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom" ng-hide="isViewListEnable" target="_blank">View {{menu.resultsQty()}} Results</a>

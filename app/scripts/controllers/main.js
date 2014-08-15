@@ -35,13 +35,18 @@ angular.module('vehicleSearchApp')
     // init menu with controller methods to handle menu changes
     $scope.menu = dataHelper.menu;
 
+    // init filter menu with labels
+    if (_.isEmpty(menuObj)) {
+      $log.error('no menu items available to create the menu');
+    } else {
+      $scope.menu.menuObj = menuObj;
+      $scope.menu.initCat();
+    }
+
     // method to refresh the sliders after being hidden
-    $scope.setSliderActive = function (bo) {
-      $scope.menu.isSliderActive = bo;
-      if (bo) {
-        $scope.menu.updateRangeC();
-        $scope.$broadcast('refreshSlider');
-      }
+    $scope.setSliderActive = function () {
+      $scope.menu.updateRangeC();
+      $scope.$broadcast('refreshSlider');
     };
 
     // listen for filter changes -> calls menu update method
@@ -54,7 +59,7 @@ angular.module('vehicleSearchApp')
 
     // listen for slider range changes not derived from filter changes -> calls menu checkRange
     $scope.$watch('menu.rangeObj', function (vnew, vold) {
-      if (vold && $scope.menu.isSliderActive && vnew !== vold) {
+      if (vold && vnew !== vold) {
         // $log.log('fNew',vnew, 'fOld',vold);
         if (rangePromise) {
           $timeout.cancel(rangePromise);
@@ -87,12 +92,6 @@ angular.module('vehicleSearchApp')
           listC: mainData,
           filterObj: {}
         };
-
-        if (_.isEmpty(menuObj)) {
-          $log.error('no menu items available to create the menu');
-        } else {
-          temp.menuObj = menuObj;
-        }
 
         if (_.isEmpty(sliderObj)) {
           $log.error('no slider items available to create the sliders');

@@ -8,7 +8,7 @@
 </div><!-- end menu-head -->
 <div class="section-container accordion main-accordion" data-section="accordion">
   <section class="active">
-    <p class="title" ng-click="setSliderActive(false)" data-section-title><a href="#">Filter By</a></p>
+    <p class="title" data-section-title><a href="#">Filter By</a></p>
     <div class="content filter-accordion" data-section-content>
       <div class="section-container accordion" data-section="accordion">
         <section ng-repeat="opt in menu.categoriesI" ng-show="menu.current === -1 || menu.current === $index">
@@ -30,7 +30,7 @@
     </div><!-- end filter-accordion -->
   </section>
   <section>
-    <p class="title" ng-click="setSliderActive(true)" data-section-title><a href="#">Range By</a></p>
+    <p class="title" ng-click="setSliderActive()" data-section-title><a href="#">Range By</a></p>
     <div class="content slider-accordion" data-section-content>
       <div ng-repeat="sld in menu.slidersI">
         <p class="labelTxt">{{sld.label}}: $<span class="price-from">{{menu.rangeObj[sld.keyval].from | number}}</span> - $<span class="price-to">{{menu.rangeObj[sld.keyval].to | number}}</span><a href="#" ng-click="menu.resetRange(sld.keyval)">Reset</a></p>

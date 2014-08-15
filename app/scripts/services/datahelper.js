@@ -44,6 +44,20 @@ angular.module('vehicleSearchApp')
         });
       },
       menu: {
+        // @description init the objects array to be injected through menu tmpl
+        // @param {Object} this.menuObj
+        // @assign {Array} this.categoriesI
+        initCat: function () {
+          var category = _.mapValues(this.menuObj, function(objVal) {
+            return {
+              valueKey: objVal.keyval,
+              valueLabel: objVal.menu.valueLabel,
+              order: objVal.menu.order
+            };
+          }, this);
+          // set category object array sorted by order key
+          this.categoriesI = _.sortBy(category, 'order');
+        },
         // @description set the objects array to be injected through menu tmpl
         // @param {Object} this.menuObj
         // @param {Array} this.listI
@@ -108,8 +122,8 @@ angular.module('vehicleSearchApp')
         // @param {Object} this.listC, cached response from initial ajax call
         // @assign {Array} this.listI
         updateModel: function() {
-          var filterOpt = _.omit(this.filterObj, this.isRangeValue);
-          var rangeOpt = _.pick(this.filterObj, this.isRangeValue);
+          var filterOpt = _.omit(this.filterObj, this.isRangeValue, this);
+          var rangeOpt = _.pick(this.filterObj, this.isRangeValue, this);
           this.listI = _.isEmpty(filterOpt) ? _.clone(this.listC) : _.where(this.listC, filterOpt);
           // this.listI = _.isEmpty(filterOpt) ? this.listC : _.reject(this.listC, function (ele) { return ele[this.filterObj] }, this);
           if (!_.isEmpty(rangeOpt)) {
@@ -171,14 +185,10 @@ angular.module('vehicleSearchApp')
         // @param {Object} this.rangeObjC
         // @modify {Object} this.filterObj
         checkRange: function () {
-          // var rangeO = _.pick(this.filterObj, this.isRangeValue);
           var _key, _value;
           _.forEach(this.rangeObj, function (value, key) {
             var sli = this.rangeObjC[key];
-            // $log.log('range', value.from, value.to, key);
-            // $log.log('slider', sli.min, sli.max, sli.keyval);
             if (value.from !== sli.from || value.to !== sli.to) {
-              // $log.log('different', key, value.from, value.to);
               _key = _.clone(key);
               _value = _.clone(value);
               _.assign(sli, value);
@@ -186,8 +196,6 @@ angular.module('vehicleSearchApp')
             }
           }, this);
           if (_.isObject(_value) && _.isString(_key)) {
-            // rangeO[_key] = _value.from + '-' + _value.to;
-            // this.filterObj = _.clone(rangeO);
             this.addOption(_key, _value.from + '-' + _value.to);
           }
         },
@@ -205,8 +213,8 @@ angular.module('vehicleSearchApp')
           this.filterObj = {};
         },
         // @description private method
-        isRangeValue: function (value) {
-          return value.indexOf('-') > -1;
+        isRangeValue: function (value, key) {
+          return this.sliderObj.hasOwnProperty(key) && value.indexOf('-') > -1;
         },
         // ----------- public methods -----------
         // @param {integer} index argument from the iterated list
@@ -222,8 +230,8 @@ angular.module('vehicleSearchApp')
         // @param {String} valueKey && key arguments from the iterated list
         // @modify this.filterObj with a new key value pair
         addOption: function(valueKey, key) {
+          this.isSliderActive = this.isRangeValue(key, valueKey);
           this.filterObj[valueKey] = key;
-          // this.filterObj[valueKey] = this.filterObj[valueKey] ? this.filterObj[valueKey] + ',' + key : key;
         },
         // removes filter option from filterObj
         // @param {integer} index argument from the iterated list

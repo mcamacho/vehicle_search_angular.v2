@@ -185,19 +185,21 @@ angular.module('vehicleSearchApp')
         // @param {Object} this.rangeObjC
         // @modify {Object} this.filterObj
         checkRange: function () {
-          var _key, _value;
-          _.forEach(this.rangeObj, function (value, key) {
-            var sli = this.rangeObjC[key];
-            if (value.from !== sli.from || value.to !== sli.to) {
-              _key = _.clone(key);
-              _value = _.clone(value);
-              _.assign(sli, value);
-              return false;
+          if (_.isObject(this.rangeObjC)) {
+            var _key, _value;
+            _.forEach(this.rangeObj, function (value, key) {
+              var sli = this.rangeObjC[key];
+              if (value.from !== sli.from || value.to !== sli.to) {
+                _key = _.clone(key);
+                _value = _.clone(value);
+                _.assign(sli, value);
+                return false;
+              }
+            }, this);
+            if (_.isObject(_value) && _.isString(_key)) {
+              this.addOption(_key, _value.from + '-' + _value.to);
             }
-          }, this);
-          if (_.isObject(_value) && _.isString(_key)) {
-            this.addOption(_key, _value.from + '-' + _value.to);
-          }
+          } 
         },
         // @param {Object} this.slidersI
         // @modify {Object} this.rangeObj

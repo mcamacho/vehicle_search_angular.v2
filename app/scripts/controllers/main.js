@@ -14,8 +14,8 @@ angular.module('vehicleSearchApp')
     // set options
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
     // check for menu and slider objects on the menu options
-    var menuObj = dataHelper.getMenuItems(opt.menu, 'menu');
-    var sliderObj = dataHelper.getMenuItems(opt.menu, 'slider');
+    var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
+    var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
     // create the ajax parameters map object
     var ajaxParams = dataHelper.getAjaxParams(opt);
 

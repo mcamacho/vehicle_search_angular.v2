@@ -12,6 +12,10 @@ angular.module('vehicleSearchApp')
     return {
       getMenuItems: function (objL, key) {
         return _.pick(objL, function(objVal) {
+          if (key.indexOf('.') > -1) {
+            var keysplit = key.split('.');
+            return _.has(objVal[keysplit[0]], keysplit[1]);
+          }
           return _.has(objVal, key);
         });
       },
@@ -99,8 +103,8 @@ angular.module('vehicleSearchApp')
             };
             return {
               keyval: objVal.keyval,
-              label: objVal.slider.valueLabel,
-              order: objVal.slider.order,
+              label: objVal.menu.valueLabel,
+              order: objVal.menu.order,
               step: 1000,
               min: min,
               max: max,

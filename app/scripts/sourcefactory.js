@@ -10,16 +10,11 @@
 angular.module('vehicleSearchOpt', [])
   .factory('sourceFactory', function () {
     var _menu = {
-      year: {
-        keyval: 'year',
-        menu: {
-          order: 15,
-          valueLabel: 'Year'
-        }
-      },
       make: {
         keyval: 'make',
         menu: {
+          group: 'Basic',
+          button: true,
           order: 5,
           valueLabel: 'Make'
         }
@@ -27,6 +22,8 @@ angular.module('vehicleSearchOpt', [])
       model: {
         keyval: 'model',
         menu: {
+          group: 'Basic',
+          button: true,
           order: 10,
           valueLabel: 'Model'
         }
@@ -34,13 +31,26 @@ angular.module('vehicleSearchOpt', [])
       trim: {
         keyval: 'trim',
         menu: {
-          order: 16,
+          group: 'Basic',
+          button: true,
+          order: 13,
           valueLabel: 'Trim'
+        }
+      },
+      year: {
+        keyval: 'year',
+        menu: {
+          group: 'Basic',
+          button: true,
+          order: 15,
+          valueLabel: 'Year'
         }
       },
       standardBody: {
         keyval: 'standard_body',
         menu: {
+          group: 'Advanced',
+          button: true,
           order: 20,
           valueLabel: 'Body'
         }
@@ -48,6 +58,8 @@ angular.module('vehicleSearchOpt', [])
       extColorGeneric: {
         keyval: 'ext_color_generic',
         menu: {
+          group: 'Advanced',
+          button: true,
           order: 25,
           valueLabel: 'Color'
         }
@@ -55,6 +67,8 @@ angular.module('vehicleSearchOpt', [])
       transmission: {
         keyval: 'transmission',
         menu: {
+          group: 'Advanced',
+          button: true,
           order: 30,
           valueLabel: 'Transmission'
         }
@@ -62,20 +76,26 @@ angular.module('vehicleSearchOpt', [])
       fuelType: {
         keyval: 'fuel_type',
         menu: {
+          group: 'Advanced',
+          button: true,
           order: 35,
           valueLabel: 'Fuel Type'
         }
       },
       price: {
         keyval: 'price',
-        slider: {
+        menu: {
+          group: 'Advanced',
+          slider: true,
           order: 5,
           valueLabel: 'Price'
         }
       },
       mileage: {
         keyval: 'mileage',
-        slider: {
+        menu: {
+          group: 'Advanced',
+          slider: true,
           order: 10,
           valueLabel: 'Mileage'
         }

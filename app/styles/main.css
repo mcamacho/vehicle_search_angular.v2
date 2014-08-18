@@ -1,3 +1,8 @@
+.mk-search .accordion { margin: 0; }
 .menu-title { padding: 0.4em !important; }
 .menu-title-table { margin: 0; width: 100%; }
 .title-icon { width: 25px; }
+.accordion table { background: transparent; border: 0; }
+.accordion table tr td { font-size: inherit; }
+.accordion button { margin: 0; }
+.section-container.accordion>section>.title .menu-title { display: block; }

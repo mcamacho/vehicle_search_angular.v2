@@ -9,6 +9,11 @@
  */
 angular.module('vehicleSearchOpt', [])
   .factory('sourceFactory', function () {
+    var _menuGroup = {
+      'Basic': [],
+      'Advanced': [],
+      'Range': []
+    };
     var _menu = {
       make: {
         keyval: 'make',
@@ -85,7 +90,7 @@ angular.module('vehicleSearchOpt', [])
       price: {
         keyval: 'price',
         menu: {
-          group: 'Advanced',
+          group: 'Range',
           slider: true,
           order: 5,
           valueLabel: 'Price'
@@ -94,7 +99,7 @@ angular.module('vehicleSearchOpt', [])
       mileage: {
         keyval: 'mileage',
         menu: {
-          group: 'Advanced',
+          group: 'Range',
           slider: true,
           order: 10,
           valueLabel: 'Mileage'
@@ -125,6 +130,7 @@ angular.module('vehicleSearchOpt', [])
     ];
     return {
       dataUrl: 'http://api.dealerx.com/_api/',
+      menuGroup: _menuGroup,
       menu: _menu,
       vtypeList: _vtypeList,
       isVtypeEnable: false,

@@ -35,14 +35,6 @@ angular.module('vehicleSearchApp')
     // init menu with controller methods to handle menu changes
     $scope.menu = dataHelper.menu;
 
-    // init filter menu with labels
-    if (_.isEmpty(menuObj)) {
-      $log.error('no menu items available to create the menu');
-    } else {
-      $scope.menu.menuObj = menuObj;
-      $scope.menu.initCat();
-    }
-
     // method to refresh the sliders after being hidden
     $scope.setSliderActive = function () {
       $scope.menu.updateRangeC();
@@ -92,6 +84,13 @@ angular.module('vehicleSearchApp')
           listC: mainData,
           filterObj: {}
         };
+
+        if (_.isEmpty(menuObj)) {
+          $log.error('no menu items available to create the menu');
+        } else {
+          temp.menuGroup = opt.menuGroup;
+          temp.menuObj = menuObj;
+        }
 
         if (_.isEmpty(sliderObj)) {
           $log.error('no slider items available to create the sliders');

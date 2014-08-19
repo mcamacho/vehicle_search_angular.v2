@@ -12,11 +12,11 @@
   </section>
 </div><!-- end menu-head -->
 <div class="section-container accordion" data-section="accordion">
-  <section class="active">
-    <div class="title" data-section-title><a href="#">Filter By</a></div>
+  <section ng-repeat="(label, group) in menu.menuGroup" ng-class="{active: $index == 0}">
+    <div class="title" data-section-title><a href="#">{{label}}</a></div>
     <div class="content filter-accordion" data-section-content>
       <div class="section-container accordion" data-section="accordion">
-        <section ng-repeat="opt in menu.categoriesI" ng-show="menu.current === -1 || menu.current === $index">
+        <section ng-repeat="opt in group" ng-show="menu.current === -1 || menu.current === $index">
           <div class="title" data-section-title ng-click="menu.setCurrent($index)">
             <a href="#" class="menu-title"><table class="menu-title-table"><tbody><tr>
               <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq($index)" ng-click="menu.removeOption($index)"></span></td>

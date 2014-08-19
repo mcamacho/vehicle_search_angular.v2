@@ -48,38 +48,28 @@ angular.module('vehicleSearchApp')
         });
       },
       menu: {
-        // @description init the objects array to be injected through menu tmpl
-        // @param {Object} this.menuObj
-        // @assign {Array} this.categoriesI
-        initCat: function () {
-          _.forEach(this.menuObj, function (objVal) {
-            var cati = this.menuGroup[objVal.menu.group];
-            var category = {
-              valueKey: objVal.keyval,
-              valueLabel: objVal.menu.valueLabel,
-              order: objVal.menu.order
-            };
-            cati.push(category);
-          }, this);
-        },
         // @description set the objects array to be injected through menu tmpl
         // @param {Object} this.menuObj
         // @param {Array} this.listI
-        // @assign {Array} this.categoriesI
+        // @assign {Array} this.menuGroup
         setCat: function () {
+          this.menuGroup = {};
           _.forEach(this.menuObj, function (objVal) {
             var values = _.remove(_.pluck(this.listI, objVal.keyval), function (ele) { return ele !== ''; });
             var countValues = _.countBy(values, function(val) {
               return val;
             });
-            var cati = this.menuGroup[objVal.menu.group];
+            this.menuGroup[objVal.menu.group] = this.menuGroup[objVal.menu.group] || [];
             var category = {
               valueKey: objVal.keyval,
               valueLabel: objVal.menu.valueLabel,
               order: objVal.menu.order,
               options: countValues
             };
-            cati.push(category);
+            this.menuGroup[objVal.menu.group].push(category);
+          }, this);
+          this.menuGroup = _.sortBy(this.menuGroup, function (value, key) {
+            return this.menuGroupOrder.indexOf(key);
           }, this);
         },
         // @description set the objects array to init sliders && init rangeObj: from & to
@@ -241,27 +231,27 @@ angular.module('vehicleSearchApp')
         },
         // removes filter option from filterObj
         // @param {integer} index argument from the iterated list
-        // @param {Array} this.categoriesI
+        // @param {Array} this.menuGroup
         // @modify this.filterObj deleting a value pair if founded
-        removeOption: function(index) { $log.log(index);
-          // this.filterObj = _.omit(this.filterObj, this.categoriesI[index].valueKey);
+        removeOption: function(group, index) {
+          this.filterObj = _.omit(this.filterObj, this.menuGroup[group][index].valueKey);
         },
         // @description updates category header if only one option is available
         // @param {Integer} index
-        // @param {Array} this.categoriesI
+        // @param {Array} this.menuGroup
         // @param {Object} this.filterObj
         // @returns HTML to append if uniq condition
-        uniq: function(index) { $log.log(index);
-          // var cat = this.categoriesI[index],
-          //   options = _.keys(cat.options),
-          //   html = '';
-          // if (options.length === 1) {
-          //   html = '<span>' + options[0] + '</span>';
-          //   if (_.has(this.filterObj, cat.valueKey)) {
-          //     html = html + '<span> <i class="fa fa-times"></i> </span>';
-          //   }
-          // }
-          // return $sce.trustAsHtml(html);
+        uniq: function(group, index) {
+          var cat = this.menuGroup[group][index],
+            options = _.keys(cat.options),
+            html = '';
+          if (options.length === 1) {
+            html = '<span>' + options[0] + '</span>';
+            if (_.has(this.filterObj, cat.valueKey)) {
+              html = html + '<span> <i class="fa fa-times"></i> </span>';
+            }
+          }
+          return $sce.trustAsHtml(html);
         }
       }
     };

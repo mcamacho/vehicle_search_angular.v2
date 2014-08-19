@@ -13,13 +13,13 @@
 </div><!-- end menu-head -->
 <div class="section-container accordion" data-section="accordion">
   <section ng-repeat="(label, group) in menu.menuGroup" ng-class="{active: $index == 0}">
-    <div class="title" data-section-title><a href="#">{{label}}</a></div>
+    <div class="title" data-section-title><a href="#">{{menu.menuGroupOrder[label]}}</a></div>
     <div class="content filter-accordion" data-section-content>
       <div class="section-container accordion" data-section="accordion">
         <section ng-repeat="opt in group" ng-show="menu.current === -1 || menu.current === $index">
           <div class="title" data-section-title ng-click="menu.setCurrent($index)">
             <a href="#" class="menu-title"><table class="menu-title-table"><tbody><tr>
-              <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq($index)" ng-click="menu.removeOption($index)"></span></td>
+              <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(label, $index)" ng-click="menu.removeOption(label, $index)"></span></td>
               <td class="title-icon"><i class="fa fa-plus-square" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
             </tr></tbody></table></a>
           </div>
@@ -34,6 +34,8 @@
       </div>
     </div><!-- end filter-accordion -->
   </section>
+  </div>
+  <div class="section-container accordion" data-section="accordion">
   <section>
     <div class="title" ng-click="setSliderActive()" data-section-title><a href="#">Range By</a></div>
     <div class="content slider-accordion" data-section-content>

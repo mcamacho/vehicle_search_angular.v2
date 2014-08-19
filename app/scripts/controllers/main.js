@@ -88,7 +88,7 @@ angular.module('vehicleSearchApp')
         if (_.isEmpty(menuObj)) {
           $log.error('no menu items available to create the menu');
         } else {
-          temp.menuGroup = opt.menuGroup;
+          temp.menuGroupOrder = opt.menuGroupOrder;
           temp.menuObj = menuObj;
         }
 

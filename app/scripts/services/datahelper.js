@@ -167,6 +167,7 @@ angular.module('vehicleSearchApp')
           if (!this.isSliderActive){
             this.updateRange();
           }
+          this.ready = true;
         },
         // ----------- range methods -----------
         // @description run a comparison loop among rangeObj vs rangeObjC,

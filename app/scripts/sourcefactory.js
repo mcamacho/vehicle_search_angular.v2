@@ -116,12 +116,16 @@ angular.module('vehicleSearchOpt', [])
     };
     var _vtypeList = [
       {
+        value: 'new',
+        label: 'New'
+      },
+      {
         value: 'used',
         label: 'Pre Owned'
       },
       {
-        value: 'new',
-        label: 'New'
+        value: 'certified',
+        label: 'Certified'
       }
     ];
     return {

@@ -48,20 +48,6 @@ angular.module('vehicleSearchApp')
         });
       },
       menu: {
-        // @description init the objects array to be injected through menu tmpl
-        // @param {Object} this.menuObj
-        // @assign {Array} this.categoriesI
-        initCat: function () {
-          var category = _.mapValues(this.menuObj, function(objVal) {
-            return {
-              valueKey: objVal.keyval,
-              valueLabel: objVal.menu.valueLabel,
-              order: objVal.menu.order
-            };
-          }, this);
-          // set category object array sorted by order key
-          this.categoriesI = _.sortBy(category, 'order');
-        },
         // @description set the objects array to be injected through menu tmpl
         // @param {Object} this.menuObj
         // @param {Array} this.listI

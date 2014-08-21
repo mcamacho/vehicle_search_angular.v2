@@ -10,13 +10,17 @@
 angular.module('vehicleSearchApp')
   .directive('searchSection', function ($log) {
     return {
-      link: function (scope, element, attrs) {
-        $log.log('0', scope, attrs);
-        attrs.$observe('ready', function () {
-          $log.log(arguments);
-          // $log.log('1', element);
-          // $log.log('a', element.children().length);
-          // $log.log('a', element.html());
+      link: function (scope, element) {
+        scope.$watch('menu.categoriesI', function () {
+          var secWidth = 320;
+          var children = element.children();
+          var totalWidth = String(secWidth * children.length);
+          children.each(function () {
+            this.style.width = secWidth + 'px';
+            this.className = 'left';
+          });
+          element.css('width', totalWidth);
+          $log.log(element.css('width'));
         });
       }
     };

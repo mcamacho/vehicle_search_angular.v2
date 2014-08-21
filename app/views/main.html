@@ -1,42 +1,44 @@
 <div id="search-nav">+ Search</div>
-<div id="search-section" search-section data-ready="{{menu.ready}}">
-  <section>
-    <div class="title"><a href="#">Condition</a></div>
-    <div class="content filter-accordion">
-      <ul class="small-block-grid-1" ng-class="{disabled: vtype.live.value === type.value}">
-        <li ng-repeat="type in vtype.list">
-          <button title="{{type.value}}" class="small" ng-class="{disabled: vtype.live.value === type.value}" ng-click="vtype.set(type.value)">{{type.label}}</button>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section ng-repeat="opt in menu.categoriesI">
-    <div class="title" ng-click="menu.setCurrent($index)">
-      <a href="#" class="menu-title"><table class="menu-title-table"><tbody><tr>
-        <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq($index)" ng-click="menu.removeOption($index)"></span></td>
-        <td class="title-icon"><i class="fa fa-plus-square" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
-      </tr></tbody></table></a>
-    </div>
-    <div class="content">
-      <ul class="small-block-grid-2">
-        <li ng-repeat="(key, count) in opt.options">
-          <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section>
-    <div class="title" ng-click="setSliderActive()"><a href="#">Range By</a></div>
-    <div class="content slider-accordion">
-      <div ng-repeat="sld in menu.slidersI">
-        <p class="labelTxt">{{sld.label}}: $<span class="price-from">{{menu.rangeObj[sld.keyval].from | number}}</span> - $<span class="price-to">{{menu.rangeObj[sld.keyval].to | number}}</span><a href="#" ng-click="menu.resetRange(sld.keyval)">Reset</a></p>
-        <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="menu.rangeObj[sld.keyval].from" ng-model-range="menu.rangeObj[sld.keyval].to" style="width: {{sld.width}};"></div>
+<div id="search-section">
+  <div search-section data-ready="{{menu.ready}}">
+    <section>
+      <div class="title"><a href="#">Condition</a></div>
+      <div class="content filter-accordion">
+        <ul class="small-block-grid-1" ng-class="{disabled: vtype.live.value === type.value}">
+          <li ng-repeat="type in vtype.list">
+            <button title="{{type.value}}" class="small" ng-class="{disabled: vtype.live.value === type.value}" ng-click="vtype.set(type.value)">{{type.label}}</button>
+          </li>
+        </ul>
       </div>
-    </div><!-- end slider -->
-  </section>
-</div><!-- end main -->
+    </section>
+
+    <section ng-repeat="opt in menu.categoriesI">
+      <div class="title" ng-click="menu.setCurrent($index)">
+        <a href="#" class="menu-title"><table class="menu-title-table"><tbody><tr>
+          <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq($index)" ng-click="menu.removeOption($index)"></span></td>
+          <td class="title-icon"><i class="fa fa-plus-square" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
+        </tr></tbody></table></a>
+      </div>
+      <div class="content">
+        <ul class="small-block-grid-1">
+          <li ng-repeat="(key, count) in opt.options">
+            <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="title" ng-click="setSliderActive()"><a href="#">Range By</a></div>
+      <div class="content slider-accordion">
+        <div ng-repeat="sld in menu.slidersI">
+          <p class="labelTxt">{{sld.label}}: $<span class="price-from">{{menu.rangeObj[sld.keyval].from | number}}</span> - $<span class="price-to">{{menu.rangeObj[sld.keyval].to | number}}</span><a href="#" ng-click="menu.resetRange(sld.keyval)">Reset</a></p>
+          <div class="ng-slider" slider floor="{{sld.min}}" ceiling="{{sld.max}}" step="{{sld.step}}" ng-model="menu.rangeObj[sld.keyval].from" ng-model-range="menu.rangeObj[sld.keyval].to" style="width: {{sld.width}};"></div>
+        </div>
+      </div><!-- end slider -->
+    </section>
+  </div><!-- end main -->
+</div>
 <div id="results">
   <a href="http://viphonda.com/inventory/{{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom" ng-hide="isViewListEnable" target="_blank">View {{menu.resultsQty()}} Results</a>
 </div>

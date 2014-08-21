@@ -6,3 +6,7 @@
 .accordion table tr td { font-size: inherit; }
 .accordion button { margin: 0; }
 .section-container.accordion>section>.title .menu-title { display: block; }
+
+#search-section { width: 100%; overflow: hidden; height: 300px; position: relative; }
+#search-section>div, #search-section>div>section { height: 100%; }
+#search-section section .content { height: 100%; overflow: scroll; padding: 0 0.25em 1em; }

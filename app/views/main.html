@@ -3,7 +3,7 @@
     <div class="title"><a href="#">Condition: {{vtype.live.label}}</a></div>
     <!-- {{vtype.enable}} {{vtype.selected.value}}-->
     <div class="content filter-accordion" data-section-content>
-      <ul class="small-block-grid-2">
+      <ul class="small-block-grid-2" ng-hide="isViewListEnable">
         <li ng-repeat="type in vtype.list">
           <button title="{{type.value}}" class="small expand" ng-class="{ disabled: vtype.live.value === type.value }" ng-click="vtype.set(type.value)">{{type.label}}</button>
         </li>

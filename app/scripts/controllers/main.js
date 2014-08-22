@@ -8,7 +8,7 @@
  * Controller of the vehicleSearchApp
  */
 angular.module('vehicleSearchApp')
-  .controller('MainCtrl', function ($scope, $window, $browser, $http, $timeout, sourceFactory, _, dataHelper, $log) {
+  .controller('MainCtrl', function ($scope, $window, $location, $browser, $http, $timeout, sourceFactory, _, dataHelper, $log) {
 
     // success ajax response
     function populateData(data) {
@@ -80,8 +80,8 @@ angular.module('vehicleSearchApp')
     var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
     // if isViewListEnable, init urlParams
     if (opt.isViewListEnable) {
-      // dataHelper.urlParams.init(opt.viewListPath || $location.path());
-      dataHelper.urlParams.init(opt.viewListPath || $window.location.pathname);
+      dataHelper.urlParams.init(opt.viewListPath || $location.path());
+      // dataHelper.urlParams.init(opt.viewListPath || $window.location.pathname);
       opt.vtypeIndex = dataHelper.urlParams.getTypeIndex(opt.vtypeList);
       $scope.list = {};
     }
@@ -151,8 +151,8 @@ angular.module('vehicleSearchApp')
         // $log.log($scope.list.query);
         callList();
         if (vold) {
-          $browser.url('/#/' + dataHelper.urlParams.getURI());
-          $window.history.replaceState(0,'history','/#/' + dataHelper.urlParams.getURI());
+          $browser.url(dataHelper.urlParams.getURI());
+          $window.history.replaceState(0,'mkhistory',dataHelper.urlParams.getURI());
         }
         // $location.path(dataHelper.urlParams.getURI());
       }

@@ -48,6 +48,39 @@ angular.module('vehicleSearchApp')
         });
       },
       urlParams: {
+        /**
+         * @description find index on types based on pathPairs pathObj condition  
+         * @returns vehicle type object index to set the current vtype
+         */
+        getTypeIndex: function (types) {
+          var typeIndex = this.pathObj.condition || -1;
+          return typeIndex === -1 ? 0 : _.findIndex(types, {value: typeIndex});
+        },
+        setPathObject: function () {
+          this.pathObj = {};
+          _.forEach(this.pathPairs, function (ele) {
+            var split = ele.split('=');
+            this[split[0]] = split[1];
+          }, this.pathObj);
+        },
+        getPathObject: function () {
+          return _.omit(this.pathObj, 'condition');
+        },
+        updatePairs: function (filterObj) {
+          // $log.log('compare', this.pathObj, filterObj);
+          this.pathObj = _.assign(_.pick(this.pathObj, 'condition'), filterObj);
+          this.pathPairs = _.map(this.pathObj, function (value, key) {
+            return key + '=' + value;
+          });
+          return this.getAjaxView();
+        },
+        getURI: function () {
+          $log.log('updateURI', this.pathPairs);
+          return this.pathPairs.join('/');
+        },
+        getAjaxView: function () {
+          return this.pathPairs.join('&') + '&json=true';
+        },
         init: function (path) {
           this.pathValues = _.compact(path.split('/'));
           this.pathUniq = _.filter(this.pathValues, function (ele) {
@@ -56,32 +89,7 @@ angular.module('vehicleSearchApp')
           this.pathPairs = _.filter(this.pathValues, function (ele) {
             return ele.indexOf('=') > -1;
           });
-          this.pathObj = {};
-          _.forEach(this.pathPairs, function (ele) {
-            var split = ele.split('=');
-            this[split[0]] = split[1];
-          }, this.pathObj);
-        },
-        getTypeIndex: function (types) {
-          var typeIndex;
-          _.forEach(types, function (obj) {
-            typeIndex = this.pathUniq.indexOf(obj.value);
-            if (typeIndex > -1) {
-              return false;
-            }
-          }, this);
-          return typeIndex === -1 ? 0 : _.findIndex(types, {value: this.pathUniq[typeIndex]});
-        },
-        updatePairs: function (filterObj) {
-          this.pathPairs = _.map(filterObj, function (value, key) {
-            return key + '=' + value;
-          });
-        },
-        getAjaxView: function () {
-          if (!_.isEmpty(this.pathPairs)) {
-            this.pathPairs.push('json=true');
-          }
-          return this.pathPairs.join('&');
+          this.setPathObject();
         }
       },
       menu: {

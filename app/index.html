@@ -29,8 +29,11 @@
       <script type="text/javascript">
         var vsOpt = {
           dataUrl: '{home}/_api/'
+          ,listUrl: '{home}/wp-content/plugins/r3/_ajax.php?'
+          ,listId: '#vehicle-list'
           ,isVtypeEnable: true
-          // ,isViewListEnable: true
+          ,isViewListEnable: true
+          // ,viewListPath: customPath
           // ,vtypeList: [{ value: 'new', label: 'New' }]
           // ,vmakeList: ['Honda']
         };
@@ -38,6 +41,7 @@
       <!-- Add your site or application content here -->
       <div class="container" ng-app="vehicleSearchApp">
         <div class="mk-search" ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+        <ul class="small-block-grid-1 large-block-grid-4" id="vehicle-list"></ul>
       </div>
     </div>
 

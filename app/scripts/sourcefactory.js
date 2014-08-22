@@ -135,6 +135,7 @@ angular.module('vehicleSearchOpt', [])
       vtypeList: _vtypeList,
       isVtypeEnable: false,
       vmakeList: [],
-      isViewListEnable: false
+      isViewListEnable: false,
+      vtypeIndex: 0
     };
   });

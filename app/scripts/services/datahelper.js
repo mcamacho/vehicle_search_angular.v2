@@ -26,7 +26,7 @@ angular.module('vehicleSearchApp')
         var params = {
           f: 'json',
           show: '-1',
-          type: o.vtypeList[0].value,
+          type: o.vtypeList[o.vtypeIndex].value,
           k: keys
         };
         if (!_.isEmpty(o.vmakeList)) {
@@ -46,6 +46,43 @@ angular.module('vehicleSearchApp')
           }
           return obj;
         });
+      },
+      urlParams: {
+        init: function (path) {
+          this.pathValues = _.compact(path.split('/'));
+          this.pathUniq = _.filter(this.pathValues, function (ele) {
+            return ele.indexOf('=') < 0;
+          });
+          this.pathPairs = _.filter(this.pathValues, function (ele) {
+            return ele.indexOf('=') > -1;
+          });
+          this.pathObj = {};
+          _.forEach(this.pathPairs, function (ele) {
+            var split = ele.split('=');
+            this[split[0]] = split[1];
+          }, this.pathObj);
+        },
+        getTypeIndex: function (types) {
+          var typeIndex;
+          _.forEach(types, function (obj) {
+            typeIndex = this.pathUniq.indexOf(obj.value);
+            if (typeIndex > -1) {
+              return false;
+            }
+          }, this);
+          return typeIndex === -1 ? 0 : _.findIndex(types, {value: this.pathUniq[typeIndex]});
+        },
+        updatePairs: function (filterObj) {
+          this.pathPairs = _.map(filterObj, function (value, key) {
+            return key + '=' + value;
+          });
+        },
+        getAjaxView: function () {
+          if (!_.isEmpty(this.pathPairs)) {
+            this.pathPairs.push('json=true');
+          }
+          return this.pathPairs.join('&');
+        }
       },
       menu: {
         // @description set the objects array to be injected through menu tmpl
@@ -248,7 +285,7 @@ angular.module('vehicleSearchApp')
           if (options.length === 1) {
             html = '<span>' + options[0] + '</span>';
             if (_.has(this.filterObj, cat.valueKey)) {
-              html = html + '<span> <i class="fa fa-times"></i> </span>';
+              html = html + '<span> <i class="search-close fa fa-times-circle"></i> </span>';
             }
           }
           return $sce.trustAsHtml(html);

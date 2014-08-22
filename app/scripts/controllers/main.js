@@ -8,7 +8,7 @@
  * Controller of the vehicleSearchApp
  */
 angular.module('vehicleSearchApp')
-  .controller('MainCtrl', function ($scope, $window, $http, $timeout, sourceFactory, _, dataHelper, $log) {
+  .controller('MainCtrl', function ($scope, $window, $location, $http, $timeout, sourceFactory, _, dataHelper, $log) {
     // define private var
     var mainData, rangePromise;
     // set options
@@ -16,6 +16,12 @@ angular.module('vehicleSearchApp')
     // check for menu and slider objects on the menu options
     var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
     var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
+    // if isViewListEnable, init urlParams
+    if (opt.isViewListEnable) {
+      dataHelper.urlParams.init(opt.viewListPath || $location.path());
+      opt.vtypeIndex = dataHelper.urlParams.getTypeIndex(opt.vtypeList);
+      $scope.list = {};
+    }
     // create the ajax parameters map object
     var ajaxParams = dataHelper.getAjaxParams(opt);
 
@@ -23,7 +29,7 @@ angular.module('vehicleSearchApp')
     $scope.vtype = {
       enable: opt.isVtypeEnable,
       list: opt.vtypeList,
-      live: opt.vtypeList[0],
+      live: opt.vtypeList[opt.vtypeIndex],
       set: function (_value) {
         this.live = _.find(this.list, {value: _value});
       }
@@ -34,6 +40,9 @@ angular.module('vehicleSearchApp')
 
     // init menu with controller methods to handle menu changes
     $scope.menu = dataHelper.menu;
+    if (opt.isViewListEnable) {
+      $scope.menu.filterObj = dataHelper.urlParams.pathObj;
+    }
 
     // method to refresh the sliders after being hidden
     $scope.setSliderActive = function () {
@@ -46,6 +55,10 @@ angular.module('vehicleSearchApp')
       if (vold && vnew !== vold) {
         // $log.log('fNew',vnew, 'fOld',vold);
         $scope.menu.update();
+        if (opt.isViewListEnable) {
+          dataHelper.urlParams.updatePairs($scope.menu.filterObj);
+          $scope.list.query = dataHelper.urlParams.getAjaxView();
+        }
       }
     }, true);
 
@@ -72,6 +85,13 @@ angular.module('vehicleSearchApp')
       }
     });
 
+    $scope.$watch('list.query', function (vnew, vold) {
+      if (vnew !== vold && vnew !== '') {
+        $log.log($scope.list.query);
+        callList();
+      }
+    });
+
     // success ajax response
     function populateData(data) {
       // replace NaN with 0 for slider fields
@@ -82,7 +102,7 @@ angular.module('vehicleSearchApp')
       } else {
         var temp = {
           listC: mainData,
-          filterObj: {}
+          filterObj: opt.isViewListEnable ? $scope.menu.filterObj : {}
         };
 
         if (_.isEmpty(menuObj)) {
@@ -101,9 +121,12 @@ angular.module('vehicleSearchApp')
         _.assign($scope.menu, temp);
         $scope.menu.setSlider();
         $scope.menu.update();
+        if (opt.isViewListEnable) {
+          $scope.list.query = dataHelper.urlParams.getAjaxView();
+        }
       }
     }
-    // ajax call
+    // ajax call data
     var callData = function () {
       $http({
         method: 'GET',
@@ -112,6 +135,22 @@ angular.module('vehicleSearchApp')
         // url: opt.dataUrl,
         params: ajaxParams
       }).success(populateData);
+    };
+
+    // success ajax response
+    function populateList(data) {
+      if (!_.isEmpty(data.view)) {
+        $window.document.querySelector(opt.listId).innerHTML = data.view;
+      }
+    }
+    // ajax call list
+    var callList = function () {
+      $http({
+        method: 'GET',
+        // method: 'POST',
+        url: 'vlist.json?' + $scope.list.query,
+        // url: opt.listUrl + $scope.list.query,
+      }).success(populateList);
     };
 
     // running the app

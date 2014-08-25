@@ -22,7 +22,7 @@ angular
         templateUrl: '/views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/:query*', {
+      .when('/:apiquery*', {
         templateUrl: '/views/main.html',
         controller: 'MainCtrl'
       })

@@ -76,7 +76,8 @@ angular.module('vehicleSearchApp')
         },
         getURI: function () {
           $log.log('updateURI', this.pathPairs);
-          return '/' + this.pathUniq.join('/') + '/' + this.pathPairs.join('/') + '/';
+          // return '/' + this.pathUniq.join('/') + '/' + this.pathPairs.join('/') + '/';
+          return this.pathPairs.join('/');
         },
         getAjaxView: function () {
           return this.pathPairs.join('&') + '&json=true';

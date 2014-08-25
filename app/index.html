@@ -40,7 +40,7 @@
       </script>
       <!-- Add your site or application content here -->
       <div class="container" ng-app="vehicleSearchApp">
-        <div class="mk-search" ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+        <div class="mk-search" ng-view></div>
         <ul class="small-block-grid-1 large-block-grid-4" id="vehicle-list"></ul>
       </div>
     </div>
@@ -61,7 +61,7 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-    <script src="bower_components/venturocket-angular-slider/build/angular-slider.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

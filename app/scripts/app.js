@@ -10,9 +10,24 @@
  */
 angular
   .module('vehicleSearchApp', [
+    'ngRoute',
     'ngAnimate',
     'ngTouch',
-    'vr.directives.slider',
     'vehicleSearchOpt'
   ])
-  .constant('_', window._);
+  .constant('_', window._)
+  .config(function ($routeProvider, $locationProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: '/views/main.html',
+        controller: 'MainCtrl'
+      })
+      .when('/:query*', {
+        templateUrl: '/views/main.html',
+        controller: 'MainCtrl'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+    $locationProvider.html5Mode(false);
+  });

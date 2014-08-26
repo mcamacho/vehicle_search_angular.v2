@@ -32,7 +32,7 @@
           ,listUrl: '{home}/wp-content/plugins/r3/_ajax.php?'
           ,listId: '#vehicle-list'
           ,isVtypeEnable: true
-          ,isViewListEnable: true
+          // ,isViewListEnable: true
           // ,viewListPath: '/condition=used/make=BMW/'
           // ,vtypeList: [{ value: 'new', label: 'New' }]
           // ,vmakeList: ['Honda']
@@ -40,8 +40,10 @@
       </script>
       <!-- Add your site or application content here -->
       <div class="container" ng-app="vehicleSearchApp">
-        <div class="mk-search" ng-view></div>
-        <ul class="small-block-grid-1 large-block-grid-4" id="vehicle-list"></ul>
+        <div ng-controller="MainCtrl">
+          <div class="mk-search" ng-view></div>
+          <ul class="small-block-grid-1 large-block-grid-4" id="vehicle-list"></ul>
+        </div>
       </div>
     </div>
 

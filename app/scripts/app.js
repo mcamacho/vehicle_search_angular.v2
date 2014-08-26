@@ -19,15 +19,13 @@ angular
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: '/views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: '/views/main.html'
       })
       .when('/:apiquery*', {
-        templateUrl: '/views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: '/views/main.html'
       })
       .otherwise({
         redirectTo: '/'
       });
-    $locationProvider.html5Mode(false);
+    $locationProvider.html5Mode(true);
   });

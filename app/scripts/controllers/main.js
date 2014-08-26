@@ -39,7 +39,7 @@ angular.module('vehicleSearchApp')
         _.assign($scope.menu, temp);
         $scope.menu.setSlider();
         $scope.menu.update();
-        if (opt.isViewListEnable) {
+        if (opt.isViewListEnable) { $log.log('populateData');
           $scope.list.query = dataHelper.urlParams.getAjaxView();
         }
       }
@@ -72,7 +72,7 @@ angular.module('vehicleSearchApp')
     };
 
     // define private var
-    var mainData, rangePromise;
+    var mainData;
     // set options
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
     // check for menu and slider objects on the menu options
@@ -108,23 +108,9 @@ angular.module('vehicleSearchApp')
       if (vold && vnew !== vold) {
         // $log.log('fNew',vnew, 'fOld',vold);
         $scope.menu.update();
-        if (opt.isViewListEnable) {
+        if (opt.isViewListEnable) { $log.log('filterObj');
           $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
         }
-      }
-    }, true);
-
-    // listen for slider range changes not derived from filter changes -> calls menu checkRange
-    $scope.$watch('menu.rangeObj', function (vnew, vold) {
-      if (vold && vnew !== vold) {
-        // $log.log('fNew',vnew, 'fOld',vold);
-        if (rangePromise) {
-          $timeout.cancel(rangePromise);
-        }
-        rangePromise = $timeout(function () {
-          $timeout.cancel(rangePromise);
-          $scope.menu.checkRange();
-        }, 500);
       }
     }, true);
 
@@ -140,8 +126,8 @@ angular.module('vehicleSearchApp')
 
     $scope.$watch('list.query', function (vnew, vold) {
       if (vnew !== vold && vnew !== '') {
-        $log.log(vnew, vold);
-        $log.log($scope.list.query);
+        $log.log('list.query - vnew,vold',vnew, vold);
+        // $log.log('list.query - list.query',$scope.list.query);
         callList();
         if (vold) {
           // $browser.url(dataHelper.urlParams.getURI());

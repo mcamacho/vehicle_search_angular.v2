@@ -67,7 +67,7 @@ angular.module('vehicleSearchApp')
           return _.omit(this.pathObj, 'condition');
         },
         updatePairs: function (filterObj) {
-          // $log.log('compare', this.pathObj, filterObj);
+          $log.log('updatePairs', this.pathObj, filterObj);
           this.pathObj = _.assign(_.pick(this.pathObj, 'condition'), filterObj);
           this.pathPairs = _.map(this.pathObj, function (value, key) {
             return key + '=' + value;
@@ -79,7 +79,7 @@ angular.module('vehicleSearchApp')
           // return '/' + this.pathUniq.join('/') + '/' + this.pathPairs.join('/') + '/';
           return this.pathPairs.join('/');
         },
-        getAjaxView: function () {
+        getAjaxView: function () { $log.log('getAjaxView');
           return this.pathPairs.join('&') + '&json=true';
         },
         init: function (path) {

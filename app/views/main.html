@@ -55,7 +55,7 @@
   </div>
   <div class="section-container accordion" data-section="accordion">
   <section>
-    <div class="title" data-section-title>
+    <div class="title" data-section-title ng-click="menu.updateRangeC()">
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
@@ -67,7 +67,7 @@
     </div>
     <div class="content slider-accordion" data-section-content>
       <div ng-repeat="sld in menu.slidersI">
-        <p class="labelTxt">{{sld.label}}: Min $<span class="price-min">{{sld.min | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].from"> - Max $<span class="price-min">{{sld.max | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].to"></p>
+        <p class="labelTxt">{{sld.label}}: Min $<span class="price-min">{{sld.min | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"> - Max $<span class="price-min">{{sld.max | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></p>
       </div>
     </div><!-- end slider-accordion -->
   </section>

@@ -1,47 +1,46 @@
-<div class="section-container accordion" data-section="accordion">
-  <section data-section-title ext-object>
-    <div class="title">
+<div class="section-container accordion">
+  <section>
+    <div class="title" toggle="section.type" ng-init="section.type = false">
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
             <td><span>Condition: {{vtype.live.label}}</span></td>
-            <td class="title-icon"><i class="fa fa-toggle-down"></i></td>
+            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section.type }" class="fa fa-toggle-down"></i></td>
           </tr>
         </tbody></table>
       </div>
     </div>
-    <!-- {{vtype.enable}} {{vtype.selected.value}}-->
-    <div class="content filter-accordion" data-section-content>
+    <div class="content filter-accordion">
       <ul class="small-block-grid-2" ng-hide="isViewListEnable">
-        <li ng-repeat="type in vtype.list">
+        <li ng-repeat="type in vtype.list" ng-click="section.type = false">
           <button title="{{type.value}}" class="small expand" ng-class="{ disabled: vtype.live.value === type.value }" ng-click="vtype.set(type.value)">{{type.label}}</button>
         </li>
       </ul>
     </div>
   </section>
 </div><!-- end menu-head -->
-<div class="section-container accordion" data-section="accordion">
-  <section ng-repeat="(label, group) in menu.menuGroup" ng-class="{ active: $index == 0 }">
-    <div class="title" data-section-title>
+<div class="section-container accordion">
+  <section ng-repeat="(label, group) in menu.menuGroup">
+    <div class="title" toggle="section['filter' + label]">
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
             <td><span>{{menu.menuGroupOrder[label]}}</span></td>
-            <td class="title-icon"><i class="fa fa-toggle-down"></i></td>
+            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section['filter' + label] }" class="fa fa-toggle-down"></i></td>
           </tr>
         </tbody></table>
       </div>
     </div>
-    <div class="content filter-accordion" data-section-content>
-      <div class="section-container accordion" data-section="accordion">
+    <div class="content filter-accordion">
+      <div class="section-container accordion">
         <section ng-repeat="opt in group" ng-show="menu.current === -1 || menu.current === $index">
-          <div class="title" data-section-title ng-click="menu.setCurrent($index)">
+          <div class="title" ng-click="menu.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
             <div class="menu-title"><table class="menu-title-table"><tbody><tr>
               <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(label, $index)" ng-click="menu.removeOption(label, $index)"></span></td>
               <td class="title-icon"><i class="fa fa-plus-square" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
             </tr></tbody></table></div>
           </div>
-          <div class="content" data-section-content>
+          <div class="content">
             <ul class="small-block-grid-2">
               <li ng-repeat="(key, count) in opt.options">
                 <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
@@ -53,19 +52,19 @@
     </div><!-- end filter-accordion -->
   </section>
   </div>
-  <div class="section-container accordion" data-section="accordion">
+  <div class="section-container accordion">
   <section>
-    <div class="title" data-section-title ng-click="menu.updateRangeC()">
+    <div class="title" ng-click="menu.updateRangeC()" toggle="section.range" ng-init="section.range = false">
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
             <td><span>Range By</span></td>
-            <td class="title-icon"><i class="fa fa-toggle-down"></i></td>
+            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section.range }" class="fa fa-toggle-down"></i></td>
           </tr>
         </tbody></table>
       </div>
     </div>
-    <div class="content slider-accordion" data-section-content>
+    <div class="content slider-accordion">
       <div ng-repeat="sld in menu.slidersI">
         <p class="labelTxt">{{sld.label}}: Min $<span class="price-min">{{sld.min | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"> - Max $<span class="price-min">{{sld.max | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></p>
       </div>

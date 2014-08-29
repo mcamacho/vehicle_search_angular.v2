@@ -19,7 +19,7 @@ angular
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: '/views/main.html',
+        templateUrl: '/views/basic.html',
         controller: 'MenuCtrl'
       })
       .when('/:apiquery*', {

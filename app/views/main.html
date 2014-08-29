@@ -34,16 +34,16 @@
     <div class="content filter-accordion">
       <div class="section-container accordion">
         <section ng-repeat="opt in group" ng-show="menu.current === -1 || menu.current === $index">
-          <div class="title" ng-click="menu.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
-            <div class="menu-title"><table class="menu-title-table"><tbody><tr>
-              <td><span>{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(label, $index)" ng-click="menu.removeOption(label, $index)"></span></td>
-              <td class="title-icon"><i class="fa fa-plus-square" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
+          <div class="title" ng-class="{ 'active-title': menu.current === $index }" ng-click="menu.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
+            <div><table class="menu-title-table"><tbody><tr>
+              <td ng-class="{ 'selected-opt': menu.labelHide(label, $index) }"><span ng-hide="menu.labelHide(label, $index)">{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(label, $index)" ng-click="menu.removeOption(label, $index)"></span></td>
+              <td class="title-icon" ng-hide="menu.labelHide(label, $index)"><i class="fa fa-plus" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
             </tr></tbody></table></div>
           </div>
           <div class="content">
             <ul class="small-block-grid-1">
               <li ng-repeat="(key, count) in opt.options">
-                <button class="small expand text-left" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
+                <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
               </li>
             </ul>
           </div>
@@ -51,8 +51,8 @@
       </div>
     </div><!-- end filter-accordion -->
   </section>
-  </div>
-  <div class="section-container accordion">
+</div>
+<div class="section-container accordion">
   <section>
     <div class="title" ng-click="menu.updateRangeC()" toggle="section.range" ng-init="section.range = false">
       <div class="menu-title">
@@ -74,4 +74,10 @@
     </div><!-- end slider-accordion -->
   </section>
 </div><!-- end main-accordion -->
-<a href="http://viphonda.com/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom ng-cloak" ng-cloak ng-hide="isViewListEnable" target="_self">View {{menu.resultsQty()}} Results</a>
+<div class="content result">
+  <table><tbody><tr>
+    <td style="width:30%;text-align:center"><strong style="font-size:2.6em;line-height:1.5em" ng-cloak>{{menu.resultsQty()}}</strong></td>
+    <td style="width:20%"><label>vehicles found</label></td>
+    <td style="width:50%"><a href="{home}/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button small expand no-margin-bottom searchinv" target="_self" ng-hide="isViewListEnable">View Inventory</a></td>
+  </tbody></table>
+</div>

@@ -296,12 +296,17 @@ angular.module('vehicleSearchApp')
             options = _.keys(cat.options),
             html = '';
           if (options.length === 1) {
-            html = '<span>' + options[0] + '</span>';
+            html = '<span> <i class="fa fa-check"></i> ' + options[0] + '</span>';
             if (_.has(this.filterObj, cat.valueKey)) {
-              html = html + '<span> <i class="search-close fa fa-times-circle"></i> </span>';
+              html = html + '<span class="right"> <i class="search-close fa fa-times"></i> </span>';
             }
           }
           return $sce.trustAsHtml(html);
+        },
+        labelHide: function(group, index) {
+          var cat = this.menuGroup[group][index],
+            options = _.keys(cat.options);
+          return options.length === 1;
         }
       }
     };

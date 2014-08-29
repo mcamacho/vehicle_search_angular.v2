@@ -31,13 +31,14 @@ angular.module('vehicleSearchApp')
         }
 
         if (_.isEmpty(sliderObj)) {
-          $log.error('no slider items available to create the sliders');
-        } else {
-          temp.sliderObj = sliderObj;
+          $log.info('no slider items available to create the sliders');
         }
+        temp.sliderObj = sliderObj;
 
         _.assign($scope.menu, temp);
-        $scope.menu.setSlider();
+        if (!_.isEmpty(sliderObj)) {
+          $scope.menu.setSlider();
+        }
         $scope.menu.update();
         if (opt.isViewListEnable) { $log.log('populateData');
           $scope.list.query = dataHelper.urlParams.getAjaxView();

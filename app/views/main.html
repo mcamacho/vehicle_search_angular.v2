@@ -4,8 +4,8 @@
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
-            <td><span>Condition: {{vtype.live.label}}</span></td>
-            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section.type }" class="fa fa-toggle-down"></i></td>
+            <td><span ng-cloak class="ng-cloak">Condition: {{vtype.live.label}}</span></td>
+            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section.type, 'fa-toggle-down': !section.type }" class="fa"></i></td>
           </tr>
         </tbody></table>
       </div>
@@ -25,8 +25,8 @@
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
-            <td><span>{{menu.menuGroupOrder[label]}}</span></td>
-            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section['filter' + label] }" class="fa fa-toggle-down"></i></td>
+            <td><span ng-cloak class="ng-cloak">{{menu.menuGroupOrder[label]}}</span></td>
+            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section['filter' + label], 'fa-toggle-down': !section['filter' + label] }" class="fa"></i></td>
           </tr>
         </tbody></table>
       </div>
@@ -41,9 +41,9 @@
             </tr></tbody></table></div>
           </div>
           <div class="content">
-            <ul class="small-block-grid-2">
+            <ul class="small-block-grid-1">
               <li ng-repeat="(key, count) in opt.options">
-                <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
+                <button class="small expand text-left" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
               </li>
             </ul>
           </div>
@@ -58,17 +58,20 @@
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
-            <td><span>Range By</span></td>
-            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section.range }" class="fa fa-toggle-down"></i></td>
+            <td><span>Price / Mileage</span></td>
+            <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section.range, 'fa-toggle-down': !section.range }" class="fa"></i></td>
           </tr>
         </tbody></table>
       </div>
     </div>
     <div class="content slider-accordion">
       <div ng-repeat="sld in menu.slidersI">
-        <p class="labelTxt">{{sld.label}}: Min $<span class="price-min">{{sld.min | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"> - Max $<span class="price-min">{{sld.max | number}}</span> <input ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></p>
+        <table class="range-table" ng-if="sld.max > 1000"><tbody>
+        <tr><td colspan="3"><label>{{sld.label}}:</label></td></tr>
+        <tr><td><input type="number" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"></td><td class="text-center"> to </td><td><input type="number" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></td></tr>
+        </tbody></table>
       </div>
     </div><!-- end slider-accordion -->
   </section>
 </div><!-- end main-accordion -->
-<a href="http://viphonda.com/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom" ng-hide="isViewListEnable" target="_blank">View {{menu.resultsQty()}} Results</a>
+<a href="http://viphonda.com/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button expand no-margin-bottom ng-cloak" ng-cloak ng-hide="isViewListEnable" target="_self">View {{menu.resultsQty()}} Results</a>

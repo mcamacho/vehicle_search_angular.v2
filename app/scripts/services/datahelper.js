@@ -27,7 +27,8 @@ angular.module('vehicleSearchApp')
           f: 'json',
           show: '-1',
           type: o.vtypeList[o.vtypeIndex].value,
-          k: keys
+          k: keys,
+          x: '1'
         };
         if (!_.isEmpty(o.vmakeList)) {
           _.assign(params, {
@@ -60,7 +61,7 @@ angular.module('vehicleSearchApp')
           this.pathObj = {};
           _.forEach(this.pathPairs, function (ele) {
             var split = ele.split('=');
-            this[split[0]] = split[1];
+            this[split[0]] = split[1].replace(/[+]/g,' ');
           }, this.pathObj);
         },
         getPathObject: function () {
@@ -70,14 +71,14 @@ angular.module('vehicleSearchApp')
           $log.log('updatePairs', this.pathObj, filterObj);
           this.pathObj = _.assign(_.pick(this.pathObj, 'condition'), filterObj);
           this.pathPairs = _.map(this.pathObj, function (value, key) {
-            return key + '=' + value;
+            return key + '=' + value.replace(/\s/g, '+');
           });
           return this.getAjaxView();
         },
         getURI: function () {
           $log.log('updateURI', this.pathPairs);
           // return '/' + this.pathUniq.join('/') + '/' + this.pathPairs.join('/') + '/';
-          return this.pathPairs.join('/');
+          return this.pathUniq.join('/') + '/' + this.pathPairs.join('/');
         },
         getAjaxView: function () { $log.log('getAjaxView');
           return this.pathPairs.join('&') + '&json=true';
@@ -87,9 +88,12 @@ angular.module('vehicleSearchApp')
           this.pathUniq = _.filter(this.pathValues, function (ele) {
             return ele.indexOf('=') < 0;
           });
-          this.pathPairs = _.filter(this.pathValues, function (ele) {
-            return ele.indexOf('=') > -1;
-          });
+          this.pathPairs = _.map(_.difference(this.pathValues, this.pathUniq),
+            function (ele) {
+              var temp = ele.split('=');
+              temp[1] = temp[1].replace(/[_]/g, '+');
+              return temp.join('=');
+            });
           this.setPathObject();
         }
       },
@@ -154,7 +158,7 @@ angular.module('vehicleSearchApp')
         // @assign {String} this.query
         getQuery: function() {
           this.query = _.map(this.filterObj, function(value, key) {
-            return key.replace(/([A-Z])/g,'_$1').toLowerCase() + '=' + value;
+            return key.replace(/([A-Z])/g,'_$1').toLowerCase() + '=' + value.replace(/\s/g,'_');
           }).join('/');
         },
         // @description recreates listI based on filterObj

@@ -30,7 +30,7 @@ angular.module('vehicleSearchOpt', [])
         }
       },
       trim: {
-        keyval: 'trim',
+        keyval: 'standard_trim',
         menu: {
           group: 'Basic',
           button: true,

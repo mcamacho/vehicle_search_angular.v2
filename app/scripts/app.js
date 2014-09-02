@@ -22,7 +22,19 @@ angular
         templateUrl: '/views/basic.html',
         controller: 'MenuCtrl'
       })
-      .when('/:apiquery*', {
+      .when('/models/', {
+        templateUrl: '/views/basic.html',
+        controller: 'MenuCtrl'
+      })
+      .when('/go/:apiquery*', {
+        templateUrl: '/views/main.html',
+        controller: 'MenuCtrl'
+      })
+      .when('/model/:apiquery*', {
+        templateUrl: '/views/main.html',
+        controller: 'MenuCtrl'
+      })
+      .when('/inventory/:apiquery*', {
         templateUrl: '/views/main.html',
         controller: 'MenuCtrl'
       })

@@ -19,7 +19,8 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <base href="/inventory/">
     <!-- endbuild -->
   </head>
   <body>
@@ -31,7 +32,7 @@
           ,listUrl: '{home}/wp-content/plugins/r3/_ajax.php?'
           ,listId: '#vehicle-list'
           ,isVtypeEnable: true
-          // ,isViewListEnable: true
+          ,isViewListEnable: true
           // ,viewListPath: '/condition=used/make=BMW/'
           // ,vtypeList: [{ value: 'new', label: 'New' }]
           // ,vmakeList: ['Honda']
@@ -40,7 +41,7 @@
       <!-- Add your site or application content here -->
       <div class="container" ng-app="vehicleSearchApp">
         <div ng-controller="MainCtrl">
-          <div class="mk-search" ng-controller="MenuCtrl" ng-include="'/views/basic.html'"></div>
+          <div class="mk-search" ng-controller="MenuCtrl" ng-include="'/views/main.html'"></div>
           <ul class="small-block-grid-1 large-block-grid-4" id="vehicle-list"></ul>
         </div>
       </div>
@@ -57,22 +58,22 @@
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-    <script src="bower_components/angular-ui-utils/mask.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/json3/lib/json3.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-touch/angular-touch.js"></script>
+    <script src="../bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="../bower_components/angular-ui-utils/mask.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/sourcefactory.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/menu.js"></script>
-    <script src="scripts/services/datahelper.js"></script>
-    <script src="scripts/directives/general.js"></script>
+    <script src="../scripts/sourcefactory.js"></script>
+    <script src="../scripts/app.js"></script>
+    <script src="../scripts/controllers/main.js"></script>
+    <script src="../scripts/controllers/menu.js"></script>
+    <script src="../scripts/services/datahelper.js"></script>
+    <script src="../scripts/directives/general.js"></script>
     <!-- endbuild -->
 
     <script src="//cdn.wpdlr.co/assets/general/js/foundation/foundation.min.js"></script>

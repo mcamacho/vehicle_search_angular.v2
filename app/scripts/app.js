@@ -10,36 +10,11 @@
  */
 angular
   .module('vehicleSearchApp', [
-    'ngRoute',
     'ngAnimate',
     'ngTouch',
     'vehicleSearchOpt'
   ])
   .constant('_', window._)
-  .config(function ($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: '/views/basic.html',
-        controller: 'MenuCtrl'
-      })
-      .when('/models/', {
-        templateUrl: '/views/basic.html',
-        controller: 'MenuCtrl'
-      })
-      .when('/go/:apiquery*', {
-        templateUrl: '/views/main.html',
-        controller: 'MenuCtrl'
-      })
-      .when('/model/:apiquery*', {
-        templateUrl: '/views/main.html',
-        controller: 'MenuCtrl'
-      })
-      .when('/inventory/:apiquery*', {
-        templateUrl: '/views/main.html',
-        controller: 'MenuCtrl'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-    $locationProvider.html5Mode(true);
+  .config(function ($locationProvider) {
+    $locationProvider.html5Mode(true).hashPrefix('!');
   });

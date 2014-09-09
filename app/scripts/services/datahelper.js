@@ -54,7 +54,7 @@ angular.module('vehicleSearchApp')
          * @returns vehicle type object index to set the current vtype
          */
         getTypeIndex: function (types) {
-          var typeIndex = this.pathObj.condition ? this.pathObj.condition.toLowerCase()  -1;
+          var typeIndex = this.pathObj.condition ? this.pathObj.condition.toLowerCase() :-1;
           return typeIndex === -1 ? 0 : _.findIndex(types, {value: typeIndex});
         },
         setPathObject: function () {
@@ -68,7 +68,7 @@ angular.module('vehicleSearchApp')
           return _.omit(this.pathObj, 'condition');
         },
         updatePairs: function (filterObj) {
-          $log.log('updatePairs', this.pathObj, filterObj);
+          // $log.log('updatePairs', this.pathObj, filterObj);
           this.pathObj = _.assign(_.pick(this.pathObj, 'condition'), filterObj);
           this.pathPairs = _.map(this.pathObj, function (value, key) {
             return key + '=' + value.replace(/\s/g, '+');
@@ -81,7 +81,7 @@ angular.module('vehicleSearchApp')
           return this.pathPairs.join('/');
           // return this.pathUniq.join('/') + '/' + this.pathPairs.join('/');
         },
-        getAjaxView: function () { $log.log('getAjaxView');
+        getAjaxView: function () {
           return this.pathPairs.join('&') + '&json=true';
         },
         init: function (path) {

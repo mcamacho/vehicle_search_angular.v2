@@ -60,6 +60,9 @@ angular.module('vehicleSearchApp')
     function populateList(data) {
       if (!_.isEmpty(data.view)) {
         $window.document.querySelector(opt.listId).innerHTML = data.view;
+        if (typeof opt.viewUpdateCall === 'function') {
+          opt.viewUpdateCall();
+        }
       }
     }
     // ajax call list

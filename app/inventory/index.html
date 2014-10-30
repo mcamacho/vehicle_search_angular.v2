@@ -12,6 +12,8 @@
 
     <link href="//cdn.wpdlr.co.s3.amazonaws.com/assets/general/css/foundation/default.css" rel="stylesheet" type="text/css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <link href="../styles/list.css" rel="stylesheet">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -42,7 +44,9 @@
       <div class="container" ng-app="vehicleSearchApp">
         <div ng-controller="MainCtrl">
           <div class="mk-search" ng-controller="MenuCtrl" ng-include="'/views/main.html'"></div>
-          <ul class="small-block-grid-1 large-block-grid-4" id="vehicle-list"></ul>
+          <ul class="large-block-grid-4" id="vehicle-list" ng-include="'/views/list.html'">
+          </ul>
+          <div below-fold></div>
         </div>
       </div>
     </div>

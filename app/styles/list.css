@@ -1,0 +1,15 @@
+#vehicle-list ul { background-color: #efefef; border: 1px solid #ccc; padding: 0.4em 0.4em 0; list-style: none; margin-left: 0; }
+#vehicle-list .image { position: relative; margin: 0.2em 0; }
+#vehicle-list .img { border-top: 1px solid #ccc; border-bottom: 1px solid #fafafa; }
+#vehicle-list .propimg { display: none; }
+#vehicle-list .button { margin-top: 0.4em; background-color: #fff; color: #333; }
+@media only screen and (min-width: 768px) {
+  #vehicle-list .propimg { width: 100%; display: inherit; }
+  #vehicle-list .img { position: absolute; bottom: 0; left: 0; }
+  #vehicle-list .item:hover .button { /*background-color: {setup_color_1};*/ color: #fff; }
+  #ajaxContainer { background-color: transparent; padding: 0; border-width: 0; box-shadow: transparent 0 0 0 0; }
+  .preview-wrap { position: relative; width: 620px; margin: 0 auto; border:solid 1px #666; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); }
+  .orbit-slides-container { height: 277px; }
+}
+/*.primary-color { color: {setup_color_1}; }*/
+.item .model, .item .payment, .item .mileage, .item .price { font-size: 1.3em; }

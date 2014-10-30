@@ -82,7 +82,7 @@ angular.module('vehicleSearchApp')
           // return this.pathUniq.join('/') + '/' + this.pathPairs.join('/');
         },
         getAjaxView: function () {
-          return this.pathPairs.join('&') + '&json=true';
+          return this.pathPairs.join('&') + '&json=true&show=all';
         },
         init: function (path) {
           this.pathValues = _.compact(path.split('/'));

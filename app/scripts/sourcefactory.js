@@ -112,6 +112,15 @@ angular.module('vehicleSearchOpt', [])
       },
       evoxId: {
         keyval: 'evox_id'
+      },
+      msrp: {
+        keyval: 'msrp'
+      },
+      certified: {
+        keyval: 'certified'
+      },
+      special: {
+        keyval: 'is_special'
       }
     };
     var _vtypeList = [

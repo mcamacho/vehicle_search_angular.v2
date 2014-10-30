@@ -40,8 +40,10 @@ angular.module('vehicleSearchApp')
           $scope.menu.setSlider();
         }
         $scope.menu.update();
-        if (opt.isViewListEnable) { $log.log('populateData');
-          $scope.list.query = dataHelper.urlParams.getAjaxView();
+        if (opt.isViewListEnable) { $log.log('populateData', mainData.length);
+          $scope.vehicles = _.first(mainData, 10);
+          // $scope.vehicles = mainData;
+          // $scope.list.query = dataHelper.urlParams.getAjaxView();
         }
       }
     }
@@ -130,9 +132,9 @@ angular.module('vehicleSearchApp')
 
     $scope.$watch('list.query', function (vnew, vold) {
       if (vnew !== vold && vnew !== '') {
-        $log.log('list.query - vnew,vold',vnew, vold);
-        // $log.log('list.query - list.query',$scope.list.query);
-        callList();
+        $log.log('list.query - vnew,vold',vnew, vold, typeof callList);
+        $log.log($scope,$scope.list.query);
+        // callList();
         if (vold) {
           // $browser.url(dataHelper.urlParams.getURI());
           // $window.history.replaceState(0,'mkhistory',dataHelper.urlParams.getURI());

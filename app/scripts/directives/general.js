@@ -31,7 +31,7 @@ angular.module('vehicleSearchApp')
         $window.onscroll = function () {
           var doc = $window.document, elem = doc.documentElement.scrollTop?doc.documentElement:doc.body;
           $log.log(elem.scrollTop, $window.innerHeight, element.offset().top);
-          $log.log(elem.scrollTop + $window.innerHeight > Math.floor(element.offset().top)) + 1;
+          $log.log(elem.scrollTop + $window.innerHeight > Math.floor(element.offset().top) + 1);
         };
       }
     };

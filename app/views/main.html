@@ -19,6 +19,7 @@
     </div>
   </section>
 </div><!-- end menu-head -->
+<button class="expand" title="specials" ng-if="menu.checkSpecials()" ng-click="menu.toogleSpecial()">{{menu.specials}}</button>
 <div class="section-container accordion">
   <section ng-repeat="(label, group) in menu.menuGroup">
     <div class="title" toggle="section['filter' + label]">

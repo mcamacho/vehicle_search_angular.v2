@@ -308,6 +308,23 @@ angular.module('vehicleSearchApp')
           var cat = this.menuGroup[group][index],
             options = _.keys(cat.options);
           return options.length === 1;
+        },
+        checkSpecials: function() {
+          if (_.where(this.listC, {'is_special': 'TRUE'}).length > 0) {
+            this.specials = this.specials || 'Show Specials';
+            return true;
+          } else {
+            return false;
+          }
+        },
+        toogleSpecial: function() {
+          if (!_.has(this.filterObj, 'is_special')) {
+            this.addOption('is_special', 'TRUE');
+            this.specials = 'Show All';
+          } else {
+            this.filterObj = _.omit(this.filterObj, 'is_special');
+            this.specials = 'Show Specials';
+          }
         }
       }
     };

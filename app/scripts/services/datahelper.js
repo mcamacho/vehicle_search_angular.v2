@@ -50,7 +50,7 @@ angular.module('vehicleSearchApp')
       },
       urlParams: {
         /**
-         * @description find index on types based on pathPairs pathObj condition  
+         * @description find index on types based on pathPairs pathObj condition
          * @returns vehicle type object index to set the current vtype
          */
         getTypeIndex: function (types) {
@@ -61,7 +61,7 @@ angular.module('vehicleSearchApp')
           this.pathObj = {};
           _.forEach(this.pathPairs, function (ele) {
             var split = ele.split('=');
-            this[split[0]] = split[1].replace(/[+]/g,' ');
+            this[split[0]] = split[1].replace(/[+]/g,' ').replace(/(%2F)/g,"/");
           }, this.pathObj);
         },
         getPathObject: function () {
@@ -82,10 +82,13 @@ angular.module('vehicleSearchApp')
           // return this.pathUniq.join('/') + '/' + this.pathPairs.join('/');
         },
         getAjaxView: function () {
-          return this.pathPairs.join('&') + '&json=true&show=all';
+          var cl = _map(this.pathPairs, function (value) {
+            return value.replace(/&/g, '%26');
+          });
+          return cl.join('&') + '&json=true&show=all';
         },
         init: function (path) {
-          this.pathValues = _.compact(path.split('/'));
+          this.pathValues = _.compact(path.replace(/(?!\/inventory)(\/)(?=\w*\/)/g, "%2F").split('/'));
           this.pathUniq = _.filter(this.pathValues, function (ele) {
             return ele.indexOf('=') < 0;
           });
@@ -244,7 +247,7 @@ angular.module('vehicleSearchApp')
             if (_.isObject(_value) && _.isString(_key)) {
               this.addOption(_key, _value.from + '-' + _value.to);
             }
-          } 
+          }
         },
         // @param {Object} this.slidersI
         // @modify {Object} this.rangeObj

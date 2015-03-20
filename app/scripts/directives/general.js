@@ -28,10 +28,16 @@ angular.module('vehicleSearchApp')
   .directive('belowFold', function ($window, $log) {
     return {
       link: function ($scope, element) {
+        var counter = 1;
         $window.onscroll = function () {
-          var doc = $window.document, elem = doc.documentElement.scrollTop?doc.documentElement:doc.body;
-          $log.log(elem.scrollTop, $window.innerHeight, element.offset().top);
-          $log.log(elem.scrollTop + $window.innerHeight > Math.floor(element.offset().top) + 1);
+          var doc = $window.document, elem = doc.documentElement.scrollTop ? doc.documentElement : doc.body;
+          // $log.log(elem.scrollTop, $window.innerHeight, element.offset().top);
+          // $log.log((elem.scrollTop + $window.innerHeight), (Math.floor(element.offset().top) - 1))
+          if( (elem.scrollTop + $window.innerHeight) > (Math.floor(element.offset().top) - 1) ) {
+            $log.log(counter, counter++);
+            // $scope.vehicles.list = $scope.vehicles.domath($scope.vehicles.groups - counter);
+            $log.log($scope.vehicles.list);
+          }
         };
       }
     };

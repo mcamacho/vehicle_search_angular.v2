@@ -12,50 +12,67 @@ angular.module('vehicleSearchApp')
 
     // success ajax response
     function populateData(data) {
-      // replace NaN with 0 for slider fields
-      mainData = dataHelper.cleanNanValues(data, sliderObj);
-
-      if (_.isEmpty(mainData)) {
+      if (_.isEmpty(data)) {
         $log.error('no data available - end of road');
       } else {
-        var temp = {
-          listC: mainData,
-          filterObj: opt.isViewListEnable ? dataHelper.urlParams.getPathObject() : {}
-        };
+        _.assign($scope.menu, {
+          menuObj: menuObj,
+          menuGroupOrder: opt.menuGroupOrder,
+          filterObj: opt.isViewListEnable ? dataHelper.urlParams.getPathObject() : {},
+          sliderObj: sliderObj,
+          listC: _.isEmpty(sliderObj) ? data : dataHelper.cleanNanValues(data, sliderObj) 
+        });
+
+        if (_.isEmpty(sliderObj)) {
+          $log.info('no slider items available to create the sliders');
+        } else {
+          $scope.menu.setSlider();
+        }
 
         if (_.isEmpty(menuObj)) {
           $log.error('no menu items available to create the menu');
         } else {
-          temp.menuGroupOrder = opt.menuGroupOrder;
-          temp.menuObj = menuObj;
+          $scope.menu.update();
         }
 
-        if (_.isEmpty(sliderObj)) {
-          $log.info('no slider items available to create the sliders');
-        }
-        temp.sliderObj = sliderObj;
+        if (opt.isViewListEnable) {
+          $scope.vehicles = {};
+          var vehicles = {
+            groups: Math.ceil($scope.menu.listI.length / opt.viewListAmount),
+            update: function(group) {
+              return _.dropRight( _.clone($scope.menu.listI), opt.viewListAmount * (this.groups - group));
+            }
+          };
+          // $log.log($scope.vehicles.groups);
+          // $scope.vehicles.domath = function(group) {
+            // if ($scope.vehicles.groups > group) {
+              // var todrop = opt.viewListAmount * ($scope.vehicles.groups - group);
+              // $log.log(todrop);
+              // return _.dropRight( $scope.menu.listI, todrop);
+            // } else {
+            //   return $scope.menu.listI; 
+            // }
+          // };
 
-        _.assign($scope.menu, temp);
-        if (!_.isEmpty(sliderObj)) {
-          $scope.menu.setSlider();
-        }
-        $scope.menu.update();
-        if (opt.isViewListEnable) { $log.log('populateData', mainData.length);
-          $scope.vehicles = _.first(mainData, 10);
-          // $scope.vehicles = mainData;
-          // $scope.list.query = dataHelper.urlParams.getAjaxView();
+          $scope.vehicles.list = vehicles.update(1);
+          // $scope.vehicles = $scope.menu.listI;
+          $scope.list.query = dataHelper.urlParams.getAjaxView();
         }
       }
     }
     // ajax call data
     var callData = function () {
-      $http({
-        method: 'GET',
-        // method: 'POST',
-        url: '/test' + ajaxParams.type + '.json',
-        // url: opt.dataUrl,
-        params: ajaxParams
-      }).success(populateData);
+      if (_.isEmpty(opt.predata)) {
+        $http({
+          method: 'GET',
+          // method: 'POST',
+          url: '/test' + ajaxParams.type + '.json',
+          // url: opt.dataUrl,
+          params: ajaxParams
+        }).success(populateData);
+      } else {
+        populateData(opt.predata);
+      }
     };
 
     // success ajax response
@@ -72,19 +89,17 @@ angular.module('vehicleSearchApp')
       $http({
         method: 'GET',
         // method: 'POST',
-        url: '/vlist.json?' + $scope.list.query,
-        // url: opt.listUrl + $scope.list.query,
+        url: '/vlist.json?' + opt.postdatacall($scope.list.query),
+        // url: opt.listUrl + opt.postdatacall($scope.list.query),
       }).success(populateList);
     };
 
-    // define private var
-    var mainData;
     // set options
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
     // check for menu and slider objects on the menu options
     var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
     var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
-    // if isViewListEnable, init urlParams
+    // if isViewListEnable, init urlParams Object, get condition if set, init scope.list Object
     if (opt.isViewListEnable) {
       dataHelper.urlParams.init(opt.viewListPath || $location.path());
       opt.vtypeIndex = dataHelper.urlParams.getTypeIndex(opt.vtypeList);
@@ -93,7 +108,7 @@ angular.module('vehicleSearchApp')
     // create the ajax parameters map object
     var ajaxParams = dataHelper.getAjaxParams(opt);
 
-    // init vtype with default or custom options
+    // init vtype with default or custom options, and set method
     $scope.vtype = {
       enable: opt.isVtypeEnable,
       list: opt.vtypeList,
@@ -106,7 +121,7 @@ angular.module('vehicleSearchApp')
     // public option to display the vehicle search result
     $scope.isViewListEnable = opt.isViewListEnable;
 
-    // init menu with controller methods to handle menu changes
+    // instance the menu object to the scope
     $scope.menu = dataHelper.menu;
 
     // listen for filter changes -> calls menu update method
@@ -114,28 +129,34 @@ angular.module('vehicleSearchApp')
       if (vold && vnew !== vold) {
         // $log.log('fNew',vnew, 'fOld',vold);
         $scope.menu.update();
-        if (opt.isViewListEnable) { $log.log('filterObj');
+        if (opt.isViewListEnable) {
+          $log.log('filterObj');
+          // $scope.vehicles = $scope.menu.listI;
           $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
         }
       }
     }, true);
 
-    // listen for vehicle type changes -> refresh the app, calling callData method
+    // listen for vtype changes -> reset the urlParams, override ajaxParams.type, recall callData method
     $scope.$watch('vtype.live', function (vnew, vold) {
       if (vnew !== vold) {
-        // $log.log('lNew',vnew, 'lOld',vold);
-        _.assign(ajaxParams, { type: vnew.value });
-        dataHelper.urlParams.pathObj = {};
-        callData();
+        if (_.isEmpty(opt.predata)) {
+          dataHelper.urlParams.init('/inventory/condition=' + vnew.value);
+          _.assign(ajaxParams, { type: vnew.value });
+          callData();
+        } else {
+          $log.warn('need client cache implementation or solve server cache');
+        }
       }
     });
 
     $scope.$watch('list.query', function (vnew, vold) {
-      if (vnew !== vold && vnew !== '') {
-        $log.log('list.query - vnew,vold',vnew, vold, typeof callList);
-        $log.log($scope,$scope.list.query);
-        // callList();
-        if (vold) {
+      if (opt.vnew !== vold && vnew !== '') {
+        if(opt.isUrlHistoryEnable && dataHelper.urlParams.pathPairs) {
+          $log.log('list.query - vnew,vold',vnew, vold, typeof callList);
+          // $log.log($scope,$scope.list.query);
+          // callList();
+          // if (vold) {
           // $browser.url(dataHelper.urlParams.getURI());
           // $window.history.replaceState(0,'mkhistory',dataHelper.urlParams.getURI());
           $location.path(dataHelper.urlParams.getURI()).replace();

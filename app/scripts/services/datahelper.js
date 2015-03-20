@@ -10,6 +10,10 @@
 angular.module('vehicleSearchApp')
   .factory('dataHelper', function (_, $sce, $log) {
     return {
+      // @description get items from the menu object that fits key/value request
+      // @param {Object} objL
+      // @param {property} key
+      // @return {Object} object properties 
       getMenuItems: function (objL, key) {
         return _.pick(objL, function(objVal) {
           if (key.indexOf('.') > -1) {
@@ -19,6 +23,9 @@ angular.module('vehicleSearchApp')
           return _.has(objVal, key);
         });
       },
+      // @description get items from the menu object that fits key/value request
+      // @param {Object} o reference the options Object=
+      // @return {Object} params to make an ajax request 
       getAjaxParams: function (o) {
         var keys = _.map(o.menu, function (oval) {
           return oval.keyval;
@@ -37,6 +44,8 @@ angular.module('vehicleSearchApp')
         }
         return params;
       },
+      // @description replace raw data NaN values with 0 
+      // @return {Object} complete data with modified values for range objects 
       cleanNanValues: function (data, objL) {
         var keys = _.map(objL, function (obj) {
           return obj.keyval;
@@ -54,15 +63,8 @@ angular.module('vehicleSearchApp')
          * @returns vehicle type object index to set the current vtype
          */
         getTypeIndex: function (types) {
-          var typeIndex = this.pathObj.condition ? this.pathObj.condition.toLowerCase() :-1;
+          var typeIndex = this.pathObj.condition ? this.pathObj.condition.toLowerCase() : -1;
           return typeIndex === -1 ? 0 : _.findIndex(types, {value: typeIndex});
-        },
-        setPathObject: function () {
-          this.pathObj = {};
-          _.forEach(this.pathPairs, function (ele) {
-            var split = ele.split('=');
-            this[split[0]] = split[1].replace(/[+]/g,' ').replace(/(%2F)/g,"/");
-          }, this.pathObj);
         },
         getPathObject: function () {
           return _.omit(this.pathObj, 'condition');
@@ -82,13 +84,18 @@ angular.module('vehicleSearchApp')
           // return this.pathUniq.join('/') + '/' + this.pathPairs.join('/');
         },
         getAjaxView: function () {
-          var cl = _map(this.pathPairs, function (value) {
+          var cl = _.map(this.pathPairs, function (value) {
             return value.replace(/&/g, '%26');
           });
           return cl.join('&') + '&json=true&show=all';
         },
+        // @description initiate the model based on the path string
+        // @init {Array} this.pathValues - array response from splitting the string using /
+        // @init {Array} this.pathUniq - filter the pathValues with just the key 
+        // @init {Array} this.pathPairs - filter the pathValues with key-value pairs and clean the response
+        // @init {Object} this.pathObject - pathPairs Array Object version 
         init: function (path) {
-          this.pathValues = _.compact(path.replace(/(?!\/inventory)(\/)(?=\w*\/)/g, "%2F").split('/'));
+          this.pathValues = _.compact(path.replace(/(?!\/inventory)(\/)(?=\w*\/)/g, '%2F').split('/'));
           this.pathUniq = _.filter(this.pathValues, function (ele) {
             return ele.indexOf('=') < 0;
           });
@@ -98,7 +105,11 @@ angular.module('vehicleSearchApp')
               temp[1] = temp[1].replace(/[_]/g, '+');
               return temp.join('=');
             });
-          this.setPathObject();
+          this.pathObj = {};
+          _.forEach(this.pathPairs, function (ele) {
+            var split = ele.split('=');
+            this[split[0]] = split[1].replace(/[+]/g,' ').replace(/(%2F)/g,'/');
+          }, this.pathObj);
         }
       },
       menu: {

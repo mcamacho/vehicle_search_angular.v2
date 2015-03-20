@@ -1,18 +1,19 @@
-<li class="item" ng-repeat="veh in vehicles">
+<li class="item" data-dealer-id="{{veh.id}}" data-dealer-distance="{{veh.distance}}" ng-repeat="veh in vehicles.list">
   <section>
     <ul>
       <li><span class="year">{{veh.year}}</span> <span class="make">{{veh.make}}</span></li>
-      <li class="no-wrap overflow-hidden-ellipsis"><span class="model primary-color">{{veh.model}}</span> <span class="trim">{{veh.standard_trim}}</span></li>
+      <li class="no-wrap overflow-hidden-ellipsis" style="line-height:1.3em;margin-bottom: 7px;font-size: .7em;"><span class="model primary-color">{{veh.model}}</span> <span class="trim">{{veh.trim}}</span></li>
       <li class="image">
         <img class="propimg" src="//cdn.wpdlr.co/assets/img/4x3.png">
-        <a href="{{veh.home}}/vehicle/{{veh.vin}}" title="{{veh.year}} {{veh.make}} {{veh.model}}">
-          <img ng-if="veh.image_1 !== ''" class="img" ng-src="{{veh.src}}{{veh.image_1}}&w=308&zc=3" alt="{{veh.year}} {{veh.make}} {{veh.model}}">
-          <img ng-if="veh.image_1 === ''" class="img" ng-src="{{veh.src}}http://cdn.wpdlr.co/assets/img/no-image-available.jpg&w=308&h=147&zc=1">
+        <a ng-href="{{veh.home}}/vehicle/{{veh.vin}}" title="{{veh.year}} {{veh.make}} {{veh.model}}">
+          {{veh.src}}{{veh.image_1}}&w=308&zc=3
+          <!-- <img ng-if="veh.image_1 !== ''" class="img" ng-src="{{veh.src}}{{veh.image_1}}&w=338&zc=3" alt="{{veh.year}} {{veh.make}} {{veh.model}}"> -->
+          <!-- <img ng-if="veh.image_1 === ''" class="img" ng-src="{{veh.src}}http://cdn.wpdlr.co/assets/img/no-image-available.jpg&w=308&h=147&zc=1"> -->
         </a>
       </li>
-     <li><span class="price">${{veh.price}}</span> <span class="right"><span ng-class="{ hide: veh.type === 'USED' }" class="mileage">{{veh.mileage}}</span>mi.</span></li>
-     <li class="text-center"><a href="{{veh.home}}/vehicle/{{veh.vin}}/?output=content-index-preview" data-reveal-id="ajaxContainer " data-reveal-ajax="true" class="preview" data-snowplow="view-car:vdpp-view:{{veh.year}},{{veh.make}},{{veh.model}},{{veh.trim}}:{{veh.vin}}:{{veh.price}}">Quick View</a></li>
-     <li><a href="{{veh.home}}/vehicle/{{veh.vin}}" class="link button small expand">See Details *</a></li>
+     <li><span class="price"><sup>$</sup>{{veh.price}}</span> <span class="right" style="padding-top: 5px;"><span class="mileage" style="font-size:1em;">{{veh.mileage}}</span>mi.</span></li>
+     <li class="text-center"><a class="link button small expand qvbutton" ng-href="{{veh.home}}/vehicle/{{veh.vin}}/?output=content-index-preview" data-reveal-id="ajaxContainer" data-reveal-ajax="true" class="preview">Quick View</a></li>
+     <li><a ng-href="{{veh.home}}/vehicle/{{veh.vin}}" class="link button small expand detbutton">See Details *</a></li>
     </ul>
   </section>
 </li>

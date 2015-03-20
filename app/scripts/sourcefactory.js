@@ -142,9 +142,16 @@ angular.module('vehicleSearchOpt', [])
       menuGroupOrder: _menuGroupOrder,
       menu: _menu,
       vtypeList: _vtypeList,
-      isVtypeEnable: false,
       vmakeList: [],
+      isVtypeEnable: false,
       isViewListEnable: false,
-      vtypeIndex: 0
+      isUrlHistoryEnable: true,
+      viewListAmount: 10,
+      vtypeIndex: 0,
+      predata: [],
+      viewUpdateCall: null,
+      postdatacall: function(query){
+        return query;
+      }
     };
   });

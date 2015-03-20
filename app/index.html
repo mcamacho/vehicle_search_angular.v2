@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Vehicle Search Angular V.2</title>
-    <meta name="description" content="">
+    <meta name="description" content="Vehicle Search Development Enviroment">
     <meta name="viewport" content="width=device-width">
 
     <script src="//wpdlr.co/wp-content/themes/_fdt/js/custom.modernizr.js"></script>
@@ -26,11 +26,35 @@
     
     <div id="vehicle-search">
       <script type="text/javascript">
+        window.predata = [
+          {
+            "make": "Ford",
+            "model": "Fusion",
+            "standard_trim": "SE",
+            "year": "2013",
+            "standard_body": "Sedan",
+            "ext_color_generic": "White",
+            "transmission": "Automatic",
+            "fuel_type": "Gasoline Fuel",
+            "price": "17,948",
+            "mileage": "30,375",
+            "vin": "3FA6P0HR3DR225436",
+            "image_1": "http:\/\/content.homenetiol.com\/640x480\/f38ff13c01f0475fb94389158dc89745.jpg",
+            "ext_color_code": "YZ",
+            "evox_id": "8503",
+            "msrp": "17,948",
+            "certified": "TRUE",
+            "is_special": "FALSE"
+          }
+        ]
+      </script>
+      <script type="text/javascript">
         var vsOpt = {
           dataUrl: '{home}/_api/'
           ,listUrl: '{home}/wp-content/plugins/r3/_ajax.php?'
           ,listId: '#vehicle-list'
           ,isVtypeEnable: true
+          // ,predata: window.predata
           // ,isViewListEnable: true
           // ,viewListPath: '/condition=used/make=BMW/'
           // ,vtypeList: [{ value: 'new', label: 'New' }]
@@ -62,8 +86,8 @@
     <script src="bower_components/json3/lib/json3.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/angular-ui-utils/mask.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

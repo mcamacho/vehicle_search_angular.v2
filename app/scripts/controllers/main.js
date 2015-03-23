@@ -20,7 +20,9 @@ angular.module('vehicleSearchApp')
           menuGroupOrder: opt.menuGroupOrder,
           filterObj: opt.isViewListEnable ? dataHelper.urlParams.getPathObject() : {},
           sliderObj: sliderObj,
-          listC: _.isEmpty(sliderObj) ? data : dataHelper.cleanNanValues(data, sliderObj) 
+          listC: _.isEmpty(sliderObj) ? data : dataHelper.cleanNanValues(data, sliderObj),
+          isViewListEnable: opt.isViewListEnable,
+          viewListAmount: opt.viewListAmount
         });
 
         if (_.isEmpty(sliderObj)) {
@@ -36,26 +38,6 @@ angular.module('vehicleSearchApp')
         }
 
         if (opt.isViewListEnable) {
-          $scope.vehicles = {};
-          var vehicles = {
-            groups: Math.ceil($scope.menu.listI.length / opt.viewListAmount),
-            update: function(group) {
-              return _.dropRight( _.clone($scope.menu.listI), opt.viewListAmount * (this.groups - group));
-            }
-          };
-          // $log.log($scope.vehicles.groups);
-          // $scope.vehicles.domath = function(group) {
-            // if ($scope.vehicles.groups > group) {
-              // var todrop = opt.viewListAmount * ($scope.vehicles.groups - group);
-              // $log.log(todrop);
-              // return _.dropRight( $scope.menu.listI, todrop);
-            // } else {
-            //   return $scope.menu.listI; 
-            // }
-          // };
-
-          $scope.vehicles.list = vehicles.update(1);
-          // $scope.vehicles = $scope.menu.listI;
           $scope.list.query = dataHelper.urlParams.getAjaxView();
         }
       }

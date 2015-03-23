@@ -236,6 +236,13 @@ angular.module('vehicleSearchApp')
           if (!this.isSliderActive){
             this.updateRange();
           }
+          // if viewListGroups initialized calls the updateList
+          if (this.isViewListEnable) {
+            this.counterList = 1;
+            this.viewListGroups = Math.ceil(this.listI.length / this.viewListAmount);
+            this.viewListRemanent = this.listI.length % this.viewListAmount;
+            this.updateList();
+          }
         },
         // ----------- range methods -----------
         // @description run a comparison loop among rangeObj vs rangeObjC,
@@ -339,6 +346,16 @@ angular.module('vehicleSearchApp')
             this.filterObj = _.omit(this.filterObj, 'is_special');
             this.specials = 'Show Specials';
           }
+        },
+        updateList: function() {
+          var todrop = this.viewListAmount * (this.viewListGroups - this.counterList);
+          if (this.counterList === 1 && this.viewListRemanent !== 0) {
+            todrop = todrop - this.viewListAmount;
+            this.counterList++;
+          }
+          this.viewList = _.dropRight( _.clone(this.listI), todrop);
+          this.counterList++;
+          $log.log(this.viewList.length);
         }
       }
     };

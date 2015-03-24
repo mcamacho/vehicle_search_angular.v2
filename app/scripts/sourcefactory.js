@@ -123,6 +123,7 @@ angular.module('vehicleSearchOpt', [])
         keyval: 'is_special'
       }
     };
+    var _sortList = ['year','model','standardBody','mileage','price'];
     var _vtypeList = [
       {
         value: 'new',
@@ -150,6 +151,9 @@ angular.module('vehicleSearchOpt', [])
       vtypeIndex: 0,
       predata: [],
       viewUpdateCall: null,
+      sortList: _sortList,
+      sortListDir: 'ascending',
+      viewListSortKey: 'year',
       postdatacall: function(query){
         return query;
       }

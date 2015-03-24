@@ -44,15 +44,15 @@ angular.module('vehicleSearchApp')
         }
         return params;
       },
-      // @description replace raw data NaN values with 0 
+      // @description replace raw data NaN values with 0 and remove ','
       // @return {Object} complete data with modified values for range objects 
-      cleanNanValues: function (data, objL) {
+      cleanValues: function (data, objL) {
         var keys = _.map(objL, function (obj) {
           return obj.keyval;
         });
         return _.map(data, function (obj) {
           for (var i = keys.length - 1; i >= 0; i--) {
-            obj[keys[i]] = /^[0-9,.]+$/.test(obj[keys[i]]) ? obj[keys[i]] : '0';
+            obj[keys[i]] = /^[0-9,.]+$/.test(obj[keys[i]]) ? parseInt(obj[keys[i]].replace(',', ''), 10) : 0;
           }
           return obj;
         });
@@ -148,7 +148,8 @@ angular.module('vehicleSearchApp')
             var cleanArray = [];
             var valArray = _.pluck(this.listC, objVal.keyval);
             for (var i = valArray.length - 1; i >= 0; i--) {
-              cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+              // cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+              cleanArray.push(valArray[i]);
             }
             var min = Math.floor(_.min(cleanArray) / 1000) * 1000;
             var max = Math.ceil(_.max(cleanArray) / 1000) * 1000;
@@ -206,7 +207,8 @@ angular.module('vehicleSearchApp')
             var cleanArray = [];
             var valArray = _.pluck(this.listI, objVal.keyval);
             for (var i = valArray.length - 1; i >= 0; i--) {
-              cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+              // cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+              cleanArray.push(valArray[i]);
             }
             var from = Math.floor(_.min(cleanArray) / 1000) * 1000;
             var to = Math.ceil(_.max(cleanArray) / 1000) * 1000;
@@ -230,6 +232,7 @@ angular.module('vehicleSearchApp')
           this.getQuery();
           // calls the method to init/recreate the listI Array
           this.updateModel();
+          this.sortList();
           // calls the method to set/update the categoriesI model
           this.setCat();
           // if sliderActive is false calls the method to update the rangeObj model
@@ -238,11 +241,19 @@ angular.module('vehicleSearchApp')
           }
           // if viewListGroups initialized calls the updateList
           if (this.isViewListEnable) {
-            this.counterList = 1;
-            this.viewListGroups = Math.ceil(this.listI.length / this.viewListAmount);
-            this.viewListRemanent = this.listI.length % this.viewListAmount;
-            this.updateList();
+            this.resetList();
           }
+        },
+        resetList: function () {
+          this.counterList = 1;
+          this.viewListGroups = Math.ceil(this.listI.length / this.viewListAmount);
+          this.viewListRemanent = this.listI.length % this.viewListAmount;
+          this.updateList();
+        },
+        sortList: function () {
+          // $log.log(this.sortListDir);
+          var temp = _.sortBy(this.listI, this.viewListSort.keyval);
+          this.listI = this.sortListDir === 'descending' ? temp.reverse() : temp;
         },
         // ----------- range methods -----------
         // @description run a comparison loop among rangeObj vs rangeObjC,

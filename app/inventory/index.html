@@ -43,6 +43,7 @@
       <!-- Add your site or application content here -->
       <div class="container" ng-app="vehicleSearchApp">
         <div ng-controller="MainCtrl">
+          <div ng-include="'/views/sort.html'"></div>
           <div class="mk-search" ng-controller="MenuCtrl" ng-include="'/views/main.html'"></div>
           <ul class="large-block-grid-4" id="vehicle-list" ng-include="'/views/list.html'">
           </ul>

@@ -20,9 +20,12 @@ angular.module('vehicleSearchApp')
           menuGroupOrder: opt.menuGroupOrder,
           filterObj: opt.isViewListEnable ? dataHelper.urlParams.getPathObject() : {},
           sliderObj: sliderObj,
-          listC: _.isEmpty(sliderObj) ? data : dataHelper.cleanNanValues(data, sliderObj),
+          listC: _.isEmpty(sliderObj) ? data : dataHelper.cleanValues(data, sliderObj),
           isViewListEnable: opt.isViewListEnable,
-          viewListAmount: opt.viewListAmount
+          viewListAmount: opt.viewListAmount,
+          sortObj: sortObj,
+          viewListSort: menuObj[opt.viewListSortKey],
+          sortListDir: opt.sortListDir
         });
 
         if (_.isEmpty(sliderObj)) {
@@ -76,11 +79,20 @@ angular.module('vehicleSearchApp')
       }).success(populateList);
     };
 
+    function updateViewList(vnew, vold) {
+      if (vold && vnew !== vold) {
+        $log.log('menu.viewListSort - vnew,vold',vnew, vold);
+        $scope.menu.sortList();
+        $scope.menu.resetList();
+      }
+    }
+
     // set options
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
     // check for menu and slider objects on the menu options
     var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
     var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
+    var sortObj = _.pick(opt.menu, opt.sortList);
     // if isViewListEnable, init urlParams Object, get condition if set, init scope.list Object
     if (opt.isViewListEnable) {
       dataHelper.urlParams.init(opt.viewListPath || $location.path());
@@ -113,7 +125,6 @@ angular.module('vehicleSearchApp')
         $scope.menu.update();
         if (opt.isViewListEnable) {
           $log.log('filterObj');
-          // $scope.vehicles = $scope.menu.listI;
           $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
         }
       }
@@ -136,16 +147,16 @@ angular.module('vehicleSearchApp')
       if (opt.vnew !== vold && vnew !== '') {
         if(opt.isUrlHistoryEnable && dataHelper.urlParams.pathPairs) {
           $log.log('list.query - vnew,vold',vnew, vold, typeof callList);
-          // $log.log($scope,$scope.list.query);
-          // callList();
-          // if (vold) {
-          // $browser.url(dataHelper.urlParams.getURI());
-          // $window.history.replaceState(0,'mkhistory',dataHelper.urlParams.getURI());
           $location.path(dataHelper.urlParams.getURI()).replace();
         }
       }
     });
 
+    $scope.$watch('menu.viewListSort', updateViewList);
+
+    $scope.$watch('menu.sortListDir', updateViewList);
     // running the app
-    callData();
+    if(_.isEmpty($scope.menu.menuObj)) {
+      callData();
+    }
   });

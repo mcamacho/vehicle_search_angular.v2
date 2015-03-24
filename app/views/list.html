@@ -11,7 +11,7 @@
           <!-- <img ng-if="veh.image_1 === ''" class="img" ng-src="{{veh.src}}http://cdn.wpdlr.co/assets/img/no-image-available.jpg&w=308&h=147&zc=1"> -->
         </a>
       </li>
-     <li><span class="price"><sup>$</sup>{{veh.price}}</span> <span class="right" style="padding-top: 5px;"><span class="mileage" style="font-size:1em;">{{veh.mileage}}</span>mi.</span></li>
+     <li><span class="price"><sup>$</sup>{{veh.price | number:0}}</span> <span class="right" style="padding-top: 5px;"><span class="mileage" style="font-size:1em;">{{veh.mileage | number:0}}</span>mi.</span></li>
      <li class="text-center"><a class="link button small expand qvbutton" ng-href="{{veh.home}}/vehicle/{{veh.vin}}/?output=content-index-preview" data-reveal-id="ajaxContainer" data-reveal-ajax="true" class="preview">Quick View</a></li>
      <li><a ng-href="{{veh.home}}/vehicle/{{veh.vin}}" class="link button small expand detbutton">See Details *</a></li>
     </ul>

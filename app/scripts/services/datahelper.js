@@ -191,8 +191,7 @@ angular.module('vehicleSearchApp')
               var filReturn = [];
               for (var ra in rangeOpt) {
                 var rangeArray = rangeOpt[ra].split('-');
-                var objValue = obj[ra].search(/[a-zA-Z]/) > -1 ? -1 : parseInt(obj[ra].replace(',',''), 10);
-                filReturn.push(objValue >= parseInt(rangeArray[0], 10) && objValue <= parseInt(rangeArray[1], 10));
+                filReturn.push(obj[ra] >= rangeArray[0] && obj[ra] <= rangeArray[1]);
               }
               return _.indexOf(filReturn, false) > -1 ? false : true;
             });

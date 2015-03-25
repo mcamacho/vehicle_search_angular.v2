@@ -68,8 +68,8 @@
     <div class="content slider-accordion">
       <div ng-repeat="sld in menu.slidersI">
         <table class="range-table" ng-if="sld.max > 1000"><tbody>
-        <tr><td colspan="3"><label>{{sld.label}}:</label></td></tr>
-        <tr><td><input type="number" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"></td><td class="text-center"> to </td><td><input type="number" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></td></tr>
+        <tr><td colspan="3"><label>{{sld.label}}:{{menu.rangeObj[sld.keyval].from}} - {{menu.rangeObj[sld.keyval].to}}</label></td></tr>
+        <tr><td><input type="text" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"></td><td class="text-center"> to </td><td><input type="text" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></td></tr>
         </tbody></table>
       </div>
     </div><!-- end slider-accordion -->

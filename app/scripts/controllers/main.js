@@ -46,8 +46,12 @@ angular.module('vehicleSearchApp')
       }
     }
     // ajax call data
-    var callData = function () {
+    function callData(vtype) {
       if (_.isEmpty(opt.predata)) {
+        var ajaxParams = dataHelper.getAjaxParams(opt);
+        if (vtype) {
+          ajaxParams.type = vtype;
+        }
         $http({
           method: 'GET',
           // method: 'POST',
@@ -58,7 +62,7 @@ angular.module('vehicleSearchApp')
       } else {
         populateData(opt.predata);
       }
-    };
+    }
 
     // success ajax response
     function populateList(data) {
@@ -70,14 +74,14 @@ angular.module('vehicleSearchApp')
       }
     }
     // ajax call list
-    var callList = function () {
+    function callList() {
       $http({
         method: 'GET',
         // method: 'POST',
         url: '/vlist.json?' + opt.postdatacall($scope.list.query),
         // url: opt.listUrl + opt.postdatacall($scope.list.query),
       }).success(populateList);
-    };
+    }
 
     function updateViewList(vnew, vold) {
       if (vold && vnew !== vold) {
@@ -87,20 +91,19 @@ angular.module('vehicleSearchApp')
       }
     }
 
-    // set options
+    // set options variable based on the default and overwrite by the external defined if exist
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
-    // check for menu and slider objects on the menu options
+    // check for menu, slider and sort objects from the menu options
     var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
     var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
     var sortObj = _.pick(opt.menu, opt.sortList);
+
     // if isViewListEnable, init urlParams Object, get condition if set, init scope.list Object
     if (opt.isViewListEnable) {
       dataHelper.urlParams.init(opt.viewListPath || $location.path());
       opt.vtypeIndex = dataHelper.urlParams.getTypeIndex(opt.vtypeList);
       $scope.list = {};
     }
-    // create the ajax parameters map object
-    var ajaxParams = dataHelper.getAjaxParams(opt);
 
     // init vtype with default or custom options, and set method
     $scope.vtype = {
@@ -124,7 +127,6 @@ angular.module('vehicleSearchApp')
         // $log.log('fNew',vnew, 'fOld',vold);
         $scope.menu.update();
         if (opt.isViewListEnable) {
-          $log.log('filterObj');
           $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
         }
       }
@@ -135,8 +137,7 @@ angular.module('vehicleSearchApp')
       if (vnew !== vold) {
         if (_.isEmpty(opt.predata)) {
           dataHelper.urlParams.init('/inventory/condition=' + vnew.value);
-          _.assign(ajaxParams, { type: vnew.value });
-          callData();
+          callData(vnew.value);
         } else {
           $log.warn('need client cache implementation or solve server cache');
         }
@@ -155,6 +156,7 @@ angular.module('vehicleSearchApp')
     $scope.$watch('menu.viewListSort', updateViewList);
 
     $scope.$watch('menu.sortListDir', updateViewList);
+
     // running the app
     if(_.isEmpty($scope.menu.menuObj)) {
       callData();

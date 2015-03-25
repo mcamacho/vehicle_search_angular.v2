@@ -6,7 +6,7 @@
   </tbody></table>
 </div>
 <div class="section-container accordion">
-  <section ng-repeat="opt in menu.menuGroup.0" ng-show="menu.current === -1 || menu.current === $index">
+  <section ng-repeat="opt in menu.menuGroup['0']" ng-show="menu.current === -1 || menu.current === $index">
     <div class="title" ng-class="{ 'active-title': menu.current === $index }" ng-click="menu.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
       <div><table class="menu-title-table"><tbody><tr>
         <td ng-class="{ 'selected-opt': menu.labelHide(0, $index) }"><span ng-hide="menu.labelHide(0, $index)">{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(0, $index)" ng-click="menu.removeOption(0, $index)"></span></td>

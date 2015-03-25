@@ -1,2 +1,2 @@
-<select ng-model="menu.viewListSort" ng-options="value.menu.valueLabel for (key , value) in menu.sortObj"></select>
+<select ng-model="menu.viewListSort" ng-options="key for (key , value) in menu.sortObj"></select>
 <select ng-model="menu.sortListDir"><option value="descending">Descending</option><option value="ascending">Ascending</option></select>

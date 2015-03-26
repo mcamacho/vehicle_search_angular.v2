@@ -10,34 +10,77 @@
 angular.module('vehicleSearchApp')
   .controller('MainCtrl', function ($scope, $window, $location, $browser, $http, $timeout, sourceFactory, _, dataHelper, $log) {
 
+    // add menu listeners
+    function addMenuListeners() {
+      // listen for filter changes -> calls menu update method
+      $scope.$watch('menu.filterObj', function (vnew, vold) {
+        if (vold && vnew !== vold) {
+          // $log.log('fNew',vnew, 'fOld',vold);
+          $scope.menu.update();
+          if (opt.isViewListEnable && opt.isUrlHistoryEnable) {
+            $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
+          }
+        }
+      }, true);
+    }
+    // add range listeners
+    function addRangeListeners() {
+      $scope.$watch('menu.rangeObj', function (vnew, vold) {
+        if (vold && vnew !== vold) {
+          _.forEach($scope.menu.rangeObj, function (val, key) {
+            if (_.isEqual(vnew[key], vold[key])) {
+              $log.log('equal', key);
+            } else {
+              $log.log('not equal', vnew[key].minsel, vnew[key].maxsel);
+              $scope.menu.addOption(key, vnew[key].minsel + '-' + vnew[key].maxsel);
+            }
+          });
+          // $scope.menu.update();
+          // if (opt.isViewListEnable && opt.isUrlHistoryEnable) {
+          //   $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
+          // }
+        }
+      }, true);
+    }
+    // init scope.menu
+    function initMenu(data) {
+      _.assign($scope.menu, {
+        menuObj: menuObj,
+        rangeObj: rangeObj,
+        sortObj: sortObj,
+        menuGroupOrder: opt.menuGroupOrder,
+        filterObj: opt.isViewListEnable ? dataHelper.urlParams.getPathObject() : {},
+        listC: _.isEmpty(rangeObj) ? data : dataHelper.cleanValues(data, rangeObj),
+        isViewListEnable: opt.isViewListEnable,
+        viewListAmount: opt.viewListAmount,
+        viewListSort: menuObj[opt.viewListSortKey],
+        sortListDir: opt.sortListDir
+      });
+
+      if (_.isEmpty(rangeObj)) {
+        $log.info('no range items available');
+      } else {
+        $scope.menu.setRange();
+        addRangeListeners();
+      }
+
+      $scope.menu.update();
+    }
+
     // success ajax response
     function populateData(data) {
       if (_.isEmpty(data)) {
         $log.error('no data available - end of road');
       } else {
-        _.assign($scope.menu, {
-          menuObj: menuObj,
-          menuGroupOrder: opt.menuGroupOrder,
-          filterObj: opt.isViewListEnable ? dataHelper.urlParams.getPathObject() : {},
-          sliderObj: sliderObj,
-          listC: _.isEmpty(sliderObj) ? data : dataHelper.cleanValues(data, sliderObj),
-          isViewListEnable: opt.isViewListEnable,
-          viewListAmount: opt.viewListAmount,
-          sortObj: sortObj,
-          viewListSort: menuObj[opt.viewListSortKey],
-          sortListDir: opt.sortListDir
-        });
-
-        if (_.isEmpty(sliderObj)) {
-          $log.info('no slider items available to create the sliders');
-        } else {
-          $scope.menu.setSlider();
-        }
-
         if (_.isEmpty(menuObj)) {
           $log.error('no menu items available to create the menu');
         } else {
-          $scope.menu.update();
+          // define scope menu instance of the dataHelper.menu
+          // init scope.menu
+          // add menu listeners
+          $scope.menu = dataHelper.menu;
+          initMenu(data);
+          addMenuListeners();
         }
 
         if (opt.isViewListEnable) {
@@ -95,7 +138,7 @@ angular.module('vehicleSearchApp')
     var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
     // check for menu, slider and sort objects from the menu options
     var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
-    var sliderObj = dataHelper.getMenuItems(opt.menu, 'menu.slider');
+    var rangeObj = dataHelper.getMenuItems(opt.menu, 'menu.range');
     var sortObj = _.pick(opt.menu, opt.sortList);
 
     // if isViewListEnable, init urlParams Object, get condition if set, init scope.list Object
@@ -114,23 +157,6 @@ angular.module('vehicleSearchApp')
         this.live = _.find(this.list, {value: _value});
       }
     };
-
-    // public option to display the vehicle search result
-    $scope.isViewListEnable = opt.isViewListEnable;
-
-    // instance the menu object to the scope
-    $scope.menu = dataHelper.menu;
-
-    // listen for filter changes -> calls menu update method
-    $scope.$watch('menu.filterObj', function (vnew, vold) {
-      if (vold && vnew !== vold) {
-        // $log.log('fNew',vnew, 'fOld',vold);
-        $scope.menu.update();
-        if (opt.isViewListEnable) {
-          $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
-        }
-      }
-    }, true);
 
     // listen for vtype changes -> reset the urlParams, override ajaxParams.type, recall callData method
     $scope.$watch('vtype.live', function (vnew, vold) {
@@ -158,7 +184,7 @@ angular.module('vehicleSearchApp')
     $scope.$watch('menu.sortListDir', updateViewList);
 
     // running the app
-    if(_.isEmpty($scope.menu.menuObj)) {
+    if(!$scope.menu) {
       callData();
     }
   });

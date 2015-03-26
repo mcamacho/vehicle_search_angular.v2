@@ -137,37 +137,32 @@ angular.module('vehicleSearchApp')
             return this.menuGroupOrder.indexOf(key);
           }, this);
         },
-        // @description set the objects array to init sliders && init rangeObj: from & to
-        // @param {Object} this.sliderObj
+        // @description extend the rangeObj with from & to, create the rangeArray
+        // @param {Object} this.rangeObj
         // @param {Array} this.listC
-        // @init {Array} this.slidersI
         // @init {Array} this.rangeObj
-        setSlider: function () {
-          this.rangeObj = {};
-          var slider = _.mapValues(this.sliderObj, function(objVal) {
-            var cleanArray = [];
-            var valArray = _.pluck(this.listC, objVal.keyval);
-            for (var i = valArray.length - 1; i >= 0; i--) {
-              // cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
-              cleanArray.push(valArray[i]);
-            }
-            var min = Math.floor(_.min(cleanArray) / 1000) * 1000;
-            var max = Math.ceil(_.max(cleanArray) / 1000) * 1000;
-            this.rangeObj[objVal.keyval] = {
-              from: min,
-              to: max
-            };
-            return {
-              keyval: objVal.keyval,
-              label: objVal.menu.valueLabel,
-              order: objVal.menu.order,
-              step: 1000,
-              min: min,
-              max: max,
-              width: '100%'
-            };
+        setRange: function () {
+          function retval(vehobj) {
+            return vehobj[skey];
+          }
+          var skey, minval, maxval, rangeval, oprangeval, interval = 5000;
+          // extend rangeObj
+          _.forEach(this.rangeObj, function (va, key) {
+            skey = key;
+            minval = _.min(this.listC, retval)[key];
+            maxval = _.max(this.listC, retval)[key];
+            rangeval = _.range(Math.floor(minval / interval) * interval, (Math.ceil(maxval / interval) + 1) * interval, 5000);
+            oprangeval = _.clone(rangeval);
+            _.assign(this.rangeObj[key], {
+              min: minval,
+              max: maxval,
+              range: rangeval,
+              oprange: oprangeval.reverse(),
+              minsel: rangeval[0],
+              maxsel: oprangeval[0]
+            });
           }, this);
-          this.slidersI = _.sortBy(slider, 'order');
+          $log.log(this.rangeObj);
         },
         // @description constructs query string
         // @param {Object} this.filterObj
@@ -198,30 +193,30 @@ angular.module('vehicleSearchApp')
           }
         },
         // @description updates rangeObj object [from] and [to] values
-        // @param {Object} this.sliderObj
+        // @param {Object} this.rangeObj
         // @param {Object} this.listI
         // @assign {Array} this.rangeObj
         updateRange: function () {
-          _.mapValues(this.sliderObj, function(objVal) {
-            var cleanArray = [];
-            var valArray = _.pluck(this.listI, objVal.keyval);
-            for (var i = valArray.length - 1; i >= 0; i--) {
-              // cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
-              cleanArray.push(valArray[i]);
-            }
-            var from = Math.floor(_.min(cleanArray) / 1000) * 1000;
-            var to = Math.ceil(_.max(cleanArray) / 1000) * 1000;
-            this.rangeObj[objVal.keyval] = {
-              from: from,
-              to: to
-            };
-          }, this);
+          // _.mapValues(this.rangeObj, function(objVal) {
+          //   var cleanArray = [];
+          //   var valArray = _.pluck(this.listI, objVal.keyval);
+          //   for (var i = valArray.length - 1; i >= 0; i--) {
+          //     // cleanArray.push(parseInt(valArray[i].replace(',', ''), 10));
+          //     cleanArray.push(valArray[i]);
+          //   }
+          //   var from = Math.floor(_.min(cleanArray) / 1000) * 1000;
+          //   var to = Math.ceil(_.max(cleanArray) / 1000) * 1000;
+          //   this.rangeObj[objVal.keyval] = {
+          //     from: from,
+          //     to: to
+          //   };
+          // }, this);
         },
         // @params {Array} this.rangeObj
         // @init {Array} this.rangeObjC
         updateRangeC: function () {
-          this.rangeObjC = _.clone(this.rangeObj, true);
-          $log.log('updaterangeC',this.rangeObjC, this.rangeObj);
+          // this.rangeObjC = _.clone(this.rangeObj, true);
+          // $log.log('updaterangeC',this.rangeObjC, this.rangeObj);
         },
         // @description init/reset [current] and call update and set methods
         // @assign {Boolean} this.isSliderActive
@@ -236,7 +231,7 @@ angular.module('vehicleSearchApp')
           this.setCat();
           // if sliderActive is false calls the method to update the rangeObj model
           if (!this.isSliderActive){
-            this.updateRange();
+            // this.updateRange();
           }
           // if viewListGroups initialized calls the updateList
           if (this.isViewListEnable) {
@@ -261,38 +256,40 @@ angular.module('vehicleSearchApp')
         // @param {Object} this.rangeObjC
         // @modify {Object} this.filterObj
         checkRange: function () {
-          if (_.isObject(this.rangeObjC)) {
-            var _key, _value;
-            _.forEach(this.rangeObj, function (value, key) {
-              var sli = this.rangeObjC[key];
-              if (value.from !== sli.from || value.to !== sli.to) {
-                _key = _.clone(key);
-                _value = _.clone(value);
-                _.assign(sli, value);
-                return false;
-              }
-            }, this);
-            if (_.isObject(_value) && _.isString(_key)) {
-              this.addOption(_key, _value.from + '-' + _value.to);
-            }
-          }
+          // if (_.isObject(this.rangeObjC)) {
+          //   var _key, _value;
+          //   _.forEach(this.rangeObj, function (value, key) {
+          //     var sli = this.rangeObjC[key];
+          //     if (value.from !== sli.from || value.to !== sli.to) {
+          //       _key = _.clone(key);
+          //       _value = _.clone(value);
+          //       _.assign(sli, value);
+          //       return false;
+          //     }
+          //   }, this);
+          //   if (_.isObject(_value) && _.isString(_key)) {
+          //     this.addOption(_key, _value.from + '-' + _value.to);
+          //   }
+          // }
         },
         // @param {Object} this.slidersI
         // @modify {Object} this.rangeObj
         // @modify {Object} this.rangeObjC
         // @modify {Object} this.filterObj
         resetRange: function (key) {
-          var sli = _.find(this.slidersI, {keyval: key});
-          this.rangeObj[key] = {
-            from: sli.min,
-            to: sli.max
-          };
-          _.assign(this.rangeObjC, this.rangeObj[key]);
-          this.filterObj = {};
+          $log.log(key);
+          // var sli = _.find(this.slidersI, {keyval: key});
+          // this.rangeObj[key] = {
+          //   from: sli.min,
+          //   to: sli.max
+          // };
+          // _.assign(this.rangeObjC, this.rangeObj[key]);
+          // this.filterObj = {};
         },
         // @description private method
         isRangeValue: function (value, key) {
-          return this.sliderObj.hasOwnProperty(key) && value.indexOf('-') > -1;
+          $log.log(value,key);
+          return this.rangeObj.hasOwnProperty(key) && value.indexOf('-') > -1;
         },
         // ----------- public methods -----------
         // @param {integer} index argument from the iterated list
@@ -308,7 +305,7 @@ angular.module('vehicleSearchApp')
         // @param {String} valueKey && key arguments from the iterated list
         // @modify this.filterObj with a new key value pair
         addOption: function(valueKey, key) {
-          this.isSliderActive = this.isRangeValue(key, valueKey);
+          // this.isSliderActive = this.isRangeValue(key, valueKey);
           this.filterObj[valueKey] = key;
         },
         // removes filter option from filterObj

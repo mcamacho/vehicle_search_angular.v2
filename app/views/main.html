@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="content filter-accordion">
-      <ul class="small-block-grid-2" ng-hide="isViewListEnable">
+      <ul class="small-block-grid-2" ng-hide="menu.isViewListEnable">
         <li ng-repeat="type in vtype.list" ng-click="section.type = false">
           <button title="{{type.value}}" class="small expand" ng-class="{ disabled: vtype.live.value === type.value }" ng-click="vtype.set(type.value)">{{type.label}}</button>
         </li>
@@ -66,10 +66,11 @@
       </div>
     </div>
     <div class="content slider-accordion">
-      <div ng-repeat="sld in menu.slidersI">
+      <div ng-repeat="sld in menu.rangeObj">
         <table class="range-table" ng-if="sld.max > 1000"><tbody>
-        <tr><td colspan="3"><label>{{sld.label}}:{{menu.rangeObj[sld.keyval].from}} - {{menu.rangeObj[sld.keyval].to}}</label></td></tr>
-        <tr><td><input type="text" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].from" ng-blur="menu.checkRange()"></td><td class="text-center"> to </td><td><input type="text" min="{{sld.min}}" max="{{sld.max}}" ng-model="menu.rangeObj[sld.keyval].to" ng-blur="menu.checkRange()"></td></tr>
+        <tr><td colspan="3"><label>{{sld.menu.valueLabel}}:{{sld.min}} - {{sld.max}}</label></td></tr>
+        <!-- <tr><td><input type="text" ng-model="sld.min" ng-blur="menu.checkRange()"></td><td class="text-center"> to </td><td><input type="text" ng-model="sld.max" ng-blur="menu.checkRange()"></td></tr> -->
+        <tr><td><select ng-model="sld.minsel" ng-options="value for value in sld.range"></select></td><td class="text-center"> to </td><td><select ng-model="sld.maxsel" ng-options="value for value in sld.oprange"></select></td></tr>
         </tbody></table>
       </div>
     </div><!-- end slider-accordion -->
@@ -79,6 +80,6 @@
   <table><tbody><tr>
     <td style="width:30%;text-align:center"><strong style="font-size:2.6em;line-height:1.5em" ng-cloak>{{menu.resultsQty()}}</strong></td>
     <td style="width:20%"><label>vehicles found</label></td>
-    <td style="width:50%"><a href="{home}/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button small expand no-margin-bottom searchinv" target="_self" ng-hide="isViewListEnable">View Inventory</a></td>
+    <td style="width:50%"><a href="{home}/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button small expand no-margin-bottom searchinv" target="_self" ng-hide="menu.isViewListEnable">View Inventory</a></td>
   </tbody></table>
 </div>

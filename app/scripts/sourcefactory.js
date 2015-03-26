@@ -87,7 +87,7 @@ angular.module('vehicleSearchOpt', [])
         keyval: 'price',
         menu: {
           group: 'Range',
-          slider: true,
+          range: true,
           order: 5,
           valueLabel: 'Price'
         }
@@ -96,7 +96,7 @@ angular.module('vehicleSearchOpt', [])
         keyval: 'mileage',
         menu: {
           group: 'Range',
-          slider: true,
+          range: true,
           order: 10,
           valueLabel: 'Mileage'
         }

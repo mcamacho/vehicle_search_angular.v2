@@ -52,7 +52,9 @@ angular.module('vehicleSearchApp')
         });
         return _.map(data, function (obj) {
           for (var i = keys.length - 1; i >= 0; i--) {
-            obj[keys[i]] = /^[0-9,.]+$/.test(obj[keys[i]]) ? parseInt(obj[keys[i]].replace(',', ''), 10) : 0;
+            if (!_.isNumber(obj[keys[i]])) {
+              obj[keys[i]] = /^[0-9,.]+$/.test(obj[keys[i]]) ? parseInt(obj[keys[i]].replace(',', ''), 10) : 0;
+            }
           }
           return obj;
         });

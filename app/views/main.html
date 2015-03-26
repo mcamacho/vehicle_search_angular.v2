@@ -69,8 +69,7 @@
       <div ng-repeat="sld in model.rangeObj">
         <table class="range-table" ng-if="sld.max > 1000"><tbody>
         <tr><td colspan="3"><label>{{sld.menu.valueLabel}}:{{sld.min}} - {{sld.max}}</label></td></tr>
-        <!-- <tr><td><input type="text" ng-model="sld.min" ng-blur="model.checkRange()"></td><td class="text-center"> to </td><td><input type="text" ng-model="sld.max" ng-blur="model.checkRange()"></td></tr> -->
-        <tr><td><select ng-model="sld.minsel" ng-options="value for value in sld.range"></select></td><td class="text-center"> to </td><td><select ng-model="sld.maxsel" ng-options="value for value in sld.oprange"></select></td></tr>
+        <tr><td><select ng-model="sld.minsel" ng-options="value | number for value in sld.range"></select></td><td class="text-center"> to </td><td><select ng-model="sld.maxsel" ng-options="value | number for value in sld.oprange"></select></td></tr>
         </tbody></table>
       </div>
     </div><!-- end slider-accordion -->

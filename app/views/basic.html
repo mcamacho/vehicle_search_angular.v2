@@ -6,17 +6,17 @@
   </tbody></table>
 </div>
 <div class="section-container accordion">
-  <section ng-repeat="opt in menu.menuGroup['0']" ng-show="menu.current === -1 || menu.current === $index">
-    <div class="title" ng-class="{ 'active-title': menu.current === $index }" ng-click="menu.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
+  <section ng-repeat="opt in model.menuGroup['0']" ng-show="model.current === -1 || model.current === $index">
+    <div class="title" ng-class="{ 'active-title': model.current === $index }" ng-click="model.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
       <div><table class="menu-title-table"><tbody><tr>
-        <td ng-class="{ 'selected-opt': menu.labelHide(0, $index) }"><span ng-hide="menu.labelHide(0, $index)">{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(0, $index)" ng-click="menu.removeOption(0, $index)"></span></td>
-        <td class="title-icon" ng-hide="menu.labelHide(0, $index)"><i class="fa fa-plus" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
+        <td ng-class="{ 'selected-opt': model.labelHide(0, $index) }"><span ng-hide="model.labelHide(0, $index)">{{opt.valueLabel}}: </span><span ng-bind-html="model.uniq(0, $index)" ng-click="model.removeOption(0, $index)"></span></td>
+        <td class="title-icon" ng-hide="model.labelHide(0, $index)"><i class="fa fa-plus" ng-show="model.current!==$index"></i><i class="fa fa-minus-square" ng-show="model.current===$index"></i></td>
       </tr></tbody></table></div>
     </div>
     <div class="content">
       <ul class="small-block-grid-1">
         <li ng-repeat="(key, count) in opt.options">
-          <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
+          <button class="small expand" title="{{count}} vehicles" ng-click="model.addOption(opt.valueKey, key)">{{key}}</button>
         </li>
       </ul>
     </div>
@@ -24,8 +24,8 @@
 </div>
 <div class="content result">
   <table><tbody><tr>
-    <td style="width:30%;text-align:center"><strong style="font-size:2.6em;line-height:1.5em" ng-cloak>{{menu.resultsQty()}}</strong></td>
+    <td style="width:30%;text-align:center"><strong style="font-size:2.6em;line-height:1.5em" ng-cloak>{{model.resultsQty()}}</strong></td>
     <td style="width:20%"><label>vehicles found</label></td>
-    <td style="width:50%"><a href="/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button small expand no-margin-bottom searchinv" target="_self">View Inventory</a></td>
+    <td style="width:50%"><a href="/inventory/condition={{vtype.live.value}}/{{model.query}}" class="button small expand no-margin-bottom searchinv" target="_self">View Inventory</a></td>
   </tbody></table>
 </div>

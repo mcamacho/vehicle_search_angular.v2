@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="content filter-accordion">
-      <ul class="small-block-grid-2" ng-hide="menu.isViewListEnable">
+      <ul class="small-block-grid-2" ng-hide="model.isViewListEnable">
         <li ng-repeat="type in vtype.list" ng-click="section.type = false">
           <button title="{{type.value}}" class="small expand" ng-class="{ disabled: vtype.live.value === type.value }" ng-click="vtype.set(type.value)">{{type.label}}</button>
         </li>
@@ -19,14 +19,14 @@
     </div>
   </section>
 </div><!-- end menu-head -->
-<button class="expand" title="specials" ng-if="menu.checkSpecials()" ng-click="menu.toogleSpecial()">{{menu.specials}}</button>
+<button class="expand" title="specials" ng-if="model.checkSpecials()" ng-click="model.toogleSpecial()">{{model.specials}}</button>
 <div class="section-container accordion">
-  <section ng-repeat="(label, group) in menu.menuGroup">
+  <section ng-repeat="(label, group) in model.menuGroup">
     <div class="title" toggle="section['filter' + label]">
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
-            <td><span ng-cloak class="ng-cloak">{{menu.menuGroupOrder[label]}}</span></td>
+            <td><span ng-cloak class="ng-cloak">{{model.menuGroupOrder[label]}}</span></td>
             <td class="title-icon"><i ng-class="{ 'fa-toggle-up': section['filter' + label], 'fa-toggle-down': !section['filter' + label] }" class="fa"></i></td>
           </tr>
         </tbody></table>
@@ -34,17 +34,17 @@
     </div>
     <div class="content filter-accordion">
       <div class="section-container accordion">
-        <section ng-repeat="opt in group" ng-show="menu.current === -1 || menu.current === $index">
-          <div class="title" ng-class="{ 'active-title': menu.current === $index }" ng-click="menu.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
+        <section ng-repeat="opt in group" ng-show="model.current === -1 || model.current === $index">
+          <div class="title" ng-class="{ 'active-title': model.current === $index }" ng-click="model.setCurrent($index)" toggle="section['option' + $index]" ng-init="section['option' + $index] = false">
             <div><table class="menu-title-table"><tbody><tr>
-              <td ng-class="{ 'selected-opt': menu.labelHide(label, $index) }"><span ng-hide="menu.labelHide(label, $index)">{{opt.valueLabel}}: </span><span ng-bind-html="menu.uniq(label, $index)" ng-click="menu.removeOption(label, $index)"></span></td>
-              <td class="title-icon" ng-hide="menu.labelHide(label, $index)"><i class="fa fa-plus" ng-show="menu.current!==$index"></i><i class="fa fa-minus-square" ng-show="menu.current===$index"></i></td>
+              <td ng-class="{ 'selected-opt': model.labelHide(label, $index) }"><span ng-hide="model.labelHide(label, $index)">{{opt.valueLabel}}: </span><span ng-bind-html="model.uniq(label, $index)" ng-click="model.removeOption(label, $index)"></span></td>
+              <td class="title-icon" ng-hide="model.labelHide(label, $index)"><i class="fa fa-plus" ng-show="model.current!==$index"></i><i class="fa fa-minus-square" ng-show="model.current===$index"></i></td>
             </tr></tbody></table></div>
           </div>
           <div class="content">
             <ul class="small-block-grid-1">
               <li ng-repeat="(key, count) in opt.options">
-                <button class="small expand" title="{{count}} vehicles" ng-click="menu.addOption(opt.valueKey, key)">{{key}}</button>
+                <button class="small expand" title="{{count}} vehicles" ng-click="model.addOption(opt.valueKey, key)">{{key}}</button>
               </li>
             </ul>
           </div>
@@ -55,7 +55,7 @@
 </div>
 <div class="section-container accordion">
   <section>
-    <div class="title" ng-click="menu.updateRangeC()" toggle="section.range" ng-init="section.range = false">
+    <div class="title" ng-click="model.updateRangeC()" toggle="section.range" ng-init="section.range = false">
       <div class="menu-title">
         <table class="menu-title-table"><tbody>
           <tr>
@@ -66,10 +66,10 @@
       </div>
     </div>
     <div class="content slider-accordion">
-      <div ng-repeat="sld in menu.rangeObj">
+      <div ng-repeat="sld in model.rangeObj">
         <table class="range-table" ng-if="sld.max > 1000"><tbody>
         <tr><td colspan="3"><label>{{sld.menu.valueLabel}}:{{sld.min}} - {{sld.max}}</label></td></tr>
-        <!-- <tr><td><input type="text" ng-model="sld.min" ng-blur="menu.checkRange()"></td><td class="text-center"> to </td><td><input type="text" ng-model="sld.max" ng-blur="menu.checkRange()"></td></tr> -->
+        <!-- <tr><td><input type="text" ng-model="sld.min" ng-blur="model.checkRange()"></td><td class="text-center"> to </td><td><input type="text" ng-model="sld.max" ng-blur="model.checkRange()"></td></tr> -->
         <tr><td><select ng-model="sld.minsel" ng-options="value for value in sld.range"></select></td><td class="text-center"> to </td><td><select ng-model="sld.maxsel" ng-options="value for value in sld.oprange"></select></td></tr>
         </tbody></table>
       </div>
@@ -78,8 +78,8 @@
 </div><!-- end main-accordion -->
 <div class="content result">
   <table><tbody><tr>
-    <td style="width:30%;text-align:center"><strong style="font-size:2.6em;line-height:1.5em" ng-cloak>{{menu.resultsQty()}}</strong></td>
+    <td style="width:30%;text-align:center"><strong style="font-size:2.6em;line-height:1.5em" ng-cloak>{{model.resultsQty()}}</strong></td>
     <td style="width:20%"><label>vehicles found</label></td>
-    <td style="width:50%"><a href="{home}/inventory/condition={{vtype.live.value}}/{{menu.query}}" class="button small expand no-margin-bottom searchinv" target="_self" ng-hide="menu.isViewListEnable">View Inventory</a></td>
+    <td style="width:50%"><a href="{home}/inventory/condition={{vtype.live.value}}/{{model.query}}" class="button small expand no-margin-bottom searchinv" target="_self" ng-hide="model.isViewListEnable">View Inventory</a></td>
   </tbody></table>
 </div>

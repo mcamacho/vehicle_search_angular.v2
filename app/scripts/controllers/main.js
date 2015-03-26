@@ -10,41 +10,44 @@
 angular.module('vehicleSearchApp')
   .controller('MainCtrl', function ($scope, $window, $location, $browser, $http, $timeout, sourceFactory, _, dataHelper, $log) {
 
-    // add menu listeners
-    function addMenuListeners() {
-      // listen for filter changes -> calls menu update method
-      $scope.$watch('menu.filterObj', function (vnew, vold) {
-        if (vold && vnew !== vold) {
-          // $log.log('fNew',vnew, 'fOld',vold);
-          $scope.menu.update();
-          if (opt.isViewListEnable && opt.isUrlHistoryEnable) {
-            $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
-          }
-        }
-      }, true);
-    }
-    // add range listeners
-    function addRangeListeners() {
-      $scope.$watch('menu.rangeObj', function (vnew, vold) {
-        if (vold && vnew !== vold) {
-          _.forEach($scope.menu.rangeObj, function (val, key) {
-            if (_.isEqual(vnew[key], vold[key])) {
-              $log.log('equal', key);
-            } else {
-              $log.log('not equal', vnew[key].minsel, vnew[key].maxsel);
-              $scope.menu.addOption(key, vnew[key].minsel + '-' + vnew[key].maxsel);
+    function addModelListeners() {
+      if (!_.isFunction(drModelLis)) {
+        // listen for filterObj changes -> calls model update method
+        drModelLis = $scope.$watch('model.filterObj', function (vnew, vold) {
+          if (vold && vnew !== vold) {
+            $scope.model.update();
+            if (opt.isViewListEnable && opt.isUrlHistoryEnable) {
+              $scope.query = dataHelper.urlParams.updatePairs($scope.model.filterObj);
             }
-          });
-          // $scope.menu.update();
-          // if (opt.isViewListEnable && opt.isUrlHistoryEnable) {
-          //   $scope.list.query = dataHelper.urlParams.updatePairs($scope.menu.filterObj);
-          // }
-        }
-      }, true);
+          }
+        }, true);
+      }
     }
-    // init scope.menu
-    function initMenu(data) {
-      _.assign($scope.menu, {
+
+    function addRangeListeners() {
+      if (!_.isFunction(drRangeLis)) {
+        drRangeLis = $scope.$watch('model.rangeObj', function (vnew, vold) {
+          if (vold && vnew !== vold) {
+            _.forEach($scope.model.rangeObj, function (val, key) {
+              if (_.isEqual(vnew[key], vold[key])) {
+                $log.log('equal', key);
+              } else {
+                $log.log('not equal', vnew[key].minsel, vnew[key].maxsel);
+                $scope.model.addOption(key, vnew[key].minsel + '-' + vnew[key].maxsel);
+              }
+            });
+            // $scope.model.update();
+            // if (opt.isViewListEnable && opt.isUrlHistoryEnable) {
+            //   $scope.query = dataHelper.urlParams.updatePairs($scope.model.filterObj);
+            // }
+          }
+        }, true);
+      }
+    }
+    
+    function initModel(data) {
+      // init scope.model
+      _.assign($scope.model, {
         menuObj: menuObj,
         rangeObj: rangeObj,
         sortObj: sortObj,
@@ -60,11 +63,11 @@ angular.module('vehicleSearchApp')
       if (_.isEmpty(rangeObj)) {
         $log.info('no range items available');
       } else {
-        $scope.menu.setRange();
+        $scope.model.setRange();
         addRangeListeners();
       }
 
-      $scope.menu.update();
+      $scope.model.update();
     }
 
     // success ajax response
@@ -75,16 +78,16 @@ angular.module('vehicleSearchApp')
         if (_.isEmpty(menuObj)) {
           $log.error('no menu items available to create the menu');
         } else {
-          // define scope menu instance of the dataHelper.menu
-          // init scope.menu
-          // add menu listeners
-          $scope.menu = dataHelper.menu;
-          initMenu(data);
-          addMenuListeners();
+          // define scope model instance of the dataHelper.model
+          // init scope.model
+          // add model listeners
+          $scope.model = dataHelper.model;
+          initModel(data);
+          addModelListeners();
         }
 
         if (opt.isViewListEnable) {
-          $scope.list.query = dataHelper.urlParams.getAjaxView();
+          $scope.query = dataHelper.urlParams.getAjaxView();
         }
       }
     }
@@ -121,31 +124,45 @@ angular.module('vehicleSearchApp')
       $http({
         method: 'GET',
         // method: 'POST',
-        url: '/vlist.json?' + opt.postdatacall($scope.list.query),
-        // url: opt.listUrl + opt.postdatacall($scope.list.query),
+        url: '/vlist.json?' + opt.postdatacall($scope.query),
+        // url: opt.listUrl + opt.postdatacall($scope.query),
       }).success(populateList);
     }
 
     function updateViewList(vnew, vold) {
       if (vold && vnew !== vold) {
-        $log.log('menu.viewListSort - vnew,vold',vnew, vold);
-        $scope.menu.sortList();
-        $scope.menu.resetList();
+        $log.log('model.viewListSort - vnew,vold',vnew, vold);
+        $scope.model.sortList();
+        $scope.model.resetList();
       }
     }
 
-    // set options variable based on the default and overwrite by the external defined if exist
-    var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
-    // check for menu, slider and sort objects from the menu options
-    var menuObj = dataHelper.getMenuItems(opt.menu, 'menu.button');
-    var rangeObj = dataHelper.getMenuItems(opt.menu, 'menu.range');
-    var sortObj = _.pick(opt.menu, opt.sortList);
+    function initQuery() {
+      $scope.query = '';
+      $scope.$watch('query', function (vnew, vold) {
+        if (opt.vnew !== vold && vnew !== '') {
+          if(opt.isUrlHistoryEnable && dataHelper.urlParams.pathPairs) {
+            $log.log('query - vnew,vold',vnew, vold, typeof callList);
+            $location.path(dataHelper.urlParams.getURI()).replace();
+          }
+        }
+      });
+    }
 
-    // if isViewListEnable, init urlParams Object, get condition if set, init scope.list Object
+    var drModelLis, drRangeLis;
+    // set options variable based on the default model and overwrite it by the external model if exist
+    var opt = _.assign(_.clone(sourceFactory), $window.vsOpt || {});
+
+    // check for menu, slider and sort objects from the menu options
+    var menuObj = dataHelper.getModelItems(opt.model, 'menu.button');
+    var rangeObj = dataHelper.getModelItems(opt.model, 'menu.range');
+    var sortObj = _.pick(opt.model, opt.sortList);
+
+    // if isViewListEnable, init urlParams Object, get vehicles condition type if set & init scope.query Object
     if (opt.isViewListEnable) {
       dataHelper.urlParams.init(opt.viewListPath || $location.path());
       opt.vtypeIndex = dataHelper.urlParams.getTypeIndex(opt.vtypeList);
-      $scope.list = {};
+      initQuery();
     }
 
     // init vtype with default or custom options, and set method
@@ -170,21 +187,12 @@ angular.module('vehicleSearchApp')
       }
     });
 
-    $scope.$watch('list.query', function (vnew, vold) {
-      if (opt.vnew !== vold && vnew !== '') {
-        if(opt.isUrlHistoryEnable && dataHelper.urlParams.pathPairs) {
-          $log.log('list.query - vnew,vold',vnew, vold, typeof callList);
-          $location.path(dataHelper.urlParams.getURI()).replace();
-        }
-      }
-    });
+    $scope.$watch('model.viewListSort', updateViewList);
 
-    $scope.$watch('menu.viewListSort', updateViewList);
+    $scope.$watch('model.sortListDir', updateViewList);
 
-    $scope.$watch('menu.sortListDir', updateViewList);
-
-    // running the app
-    if(!$scope.menu) {
+    // launch the app if none exist
+    if(_.isEmpty($scope.model)) {
       callData();
     }
   });

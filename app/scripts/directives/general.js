@@ -32,7 +32,7 @@ angular.module('vehicleSearchApp')
           var doc = $window.document, elem = doc.documentElement.scrollTop ? doc.documentElement : doc.body;
           if( (elem.scrollTop + $window.innerHeight) > (Math.floor(element.offset().top) - 1) ) {
             $log.info('belowFold');
-            $scope.menu.updateList();
+            $scope.model.updateList();
             $scope.$digest();
           }
         };

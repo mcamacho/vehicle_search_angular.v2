@@ -5,16 +5,16 @@
  * @name vehicleSearchApp.factory:dataHelper
  * @description
  * # helper
- * Contains the menu object hash, the default vehicle condition types
+ * Contains the model object hash, the default vehicle condition types
  */
 angular.module('vehicleSearchApp')
   .factory('dataHelper', function (_, $sce, $log) {
     return {
-      // @description get items from the menu object that fits key/value request
+      // @description get items from the model object that fits key/value request
       // @param {Object} objL
       // @param {property} key
       // @return {Object} object properties 
-      getMenuItems: function (objL, key) {
+      getModelItems: function (objL, key) {
         return _.pick(objL, function(objVal) {
           if (key.indexOf('.') > -1) {
             var keysplit = key.split('.');
@@ -23,11 +23,11 @@ angular.module('vehicleSearchApp')
           return _.has(objVal, key);
         });
       },
-      // @description get items from the menu object that fits key/value request
+      // @description get the query params from the model object that fits key/value request
       // @param {Object} o reference the options Object=
       // @return {Object} params to make an ajax request 
       getAjaxParams: function (o) {
-        var keys = _.map(o.menu, function (oval) {
+        var keys = _.map(o.model, function (oval) {
           return oval.keyval;
         }).join();
         var params = {
@@ -112,7 +112,7 @@ angular.module('vehicleSearchApp')
           }, this.pathObj);
         }
       },
-      menu: {
+      model: {
         // @description set the objects array to be injected through menu tmpl
         // @param {Object} this.menuObj
         // @param {Array} this.listI
@@ -162,7 +162,17 @@ angular.module('vehicleSearchApp')
               maxsel: oprangeval[0]
             });
           }, this);
-          $log.log(this.rangeObj);
+
+          if (!_.isEmpty(this.filterObj)) {
+            _.forEach(_.keys(this.rangeObj), function(key) {
+              if (_.has(this.filterObj, key)) {
+                var qrysplit = this.filterObj[key].split('-');
+                this.rangeObj[key].minsel = parseInt(qrysplit[0]);
+                this.rangeObj[key].maxsel = parseInt(qrysplit[1]);
+              }
+            }, this);
+          }
+          // $log.log(this.rangeObj);
         },
         // @description constructs query string
         // @param {Object} this.filterObj
@@ -230,9 +240,9 @@ angular.module('vehicleSearchApp')
           // calls the method to set/update the categoriesI model
           this.setCat();
           // if sliderActive is false calls the method to update the rangeObj model
-          if (!this.isSliderActive){
+          // if (!this.isSliderActive){
             // this.updateRange();
-          }
+          // }
           // if viewListGroups initialized calls the updateList
           if (this.isViewListEnable) {
             this.resetList();
@@ -277,7 +287,7 @@ angular.module('vehicleSearchApp')
         // @modify {Object} this.rangeObjC
         // @modify {Object} this.filterObj
         resetRange: function (key) {
-          $log.log(key);
+          $log.log('resetRange', key);
           // var sli = _.find(this.slidersI, {keyval: key});
           // this.rangeObj[key] = {
           //   from: sli.min,
@@ -288,7 +298,7 @@ angular.module('vehicleSearchApp')
         },
         // @description private method
         isRangeValue: function (value, key) {
-          $log.log(value,key);
+          // $log.log('isRangeValue', value,key);
           return this.rangeObj.hasOwnProperty(key) && value.indexOf('-') > -1;
         },
         // ----------- public methods -----------
@@ -362,7 +372,7 @@ angular.module('vehicleSearchApp')
           }
           this.viewList = _.dropRight( _.clone(this.listI), todrop);
           this.counterList++;
-          $log.log(this.viewList.length);
+          $log.log('viewList.length',this.viewList.length);
         }
       }
     };

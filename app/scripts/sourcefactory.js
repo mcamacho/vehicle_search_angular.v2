@@ -10,7 +10,7 @@
 angular.module('vehicleSearchOpt', [])
   .factory('sourceFactory', function () {
     var _menuGroupOrder = ['Basic', 'Advanced'];
-    var _menu = {
+    var _model = {
       make: {
         keyval: 'make',
         menu: {
@@ -141,7 +141,7 @@ angular.module('vehicleSearchOpt', [])
     return {
       dataUrl: 'http://api.dealerx.com/_api/',
       menuGroupOrder: _menuGroupOrder,
-      menu: _menu,
+      model: _model,
       vtypeList: _vtypeList,
       vmakeList: [],
       isVtypeEnable: false,
